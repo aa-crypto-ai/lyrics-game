@@ -40,9 +40,25 @@ from channels.auth import channel_session_user, channel_session_user_from_http
 
 from channels.security.websockets import allowed_hosts_only
 
+from channels import Channel
 # Connected to websocket.connect
 # @channel_session
 
+# Connected to chat-messages
+def msg_consumer(message):
+    # Save to model
+    room = message.content['room']
+    # ChatMessage.objects.create(
+    #     room=room,
+    #     message=message.content['message'],
+    # )
+    # Broadcast to listening sockets
+    Group("chat-%s" % room).send({
+        "text": json.dumps({
+            "text": message.content['text'],
+            'username': message.content['username'],
+        })
+    })
 
 @allowed_hosts_only
 @channel_session_user_from_http
@@ -65,12 +81,17 @@ def ws_connect(message, room_name):
 
 @channel_session_user
 def ws_message(message, room_name):
-    Group("chat-%s" % room_name).send({
-        "text": json.dumps({
-            "text": message["text"],
-            "username": message.channel_session["username"],
-        }),
+    Channel('chat-messages').send({
+        "text": message["text"],
+        "username": message.channel_session["username"],
+        "room": room_name,
     })
+    # Group("chat-%s" % room_name).send({
+    #     "text": json.dumps({
+    #         "text": message["text"],
+    #         "username": message.channel_session["username"],
+    #     }),
+    # })
 
 # Connected to websocket.disconnect
 # @channel_session

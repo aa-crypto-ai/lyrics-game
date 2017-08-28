@@ -7,8 +7,8 @@ from django import forms
 import re
 import pytz, datetime
 
-def room_view(request, room_id):
+def play_view(request, room_id):
 
-    return render(request, 'templates/lyrics/room.html', {
+    return render(request, 'templates/lyrics/play.html', {
         'room_id': int(room_id),
     })

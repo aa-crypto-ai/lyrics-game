@@ -36,6 +36,6 @@ urlpatterns = [
     url(r'^logout/$', auth_views.logout, name='logout'),
     url(r'^admin/', admin.site.urls),
     url(r'^test/', current_datetime),
-    url(r'^room/(?P<room_id>[0-9]+)/$', lyrics_view.room_view),
+    url(r'^room/(?P<room_id>[0-9]+)/$', lyrics_view.play_view),
     # url(r'^chat/', include('multichat.routing')),
 ]
