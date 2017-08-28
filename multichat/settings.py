@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'channels',
+    'lyrics',
 ]
 
 MIDDLEWARE = [
@@ -51,11 +52,12 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'multichat.urls'
+LOGIN_REDIRECT_URL = '/test'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -131,12 +133,12 @@ redis_host = os.environ.get('REDIS_HOST', 'localhost')
 # http://channels.readthedocs.org/en/latest/deploying.html#setting-up-a-channel-backend
 CHANNEL_LAYERS = {
     "default": {
-        "BACKEND": "asgiref.inmemory.ChannelLayer",
+        # "BACKEND": "asgiref.inmemory.ChannelLayer",
         # This example app uses the Redis channel layer implementation asgi_redis
-        # "BACKEND": "asgi_redis.RedisChannelLayer",
-        # "CONFIG": {
-            # "hosts": [(redis_host, 6379)],
-        # },
+        "BACKEND": "asgi_redis.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [(redis_host, 6379)],
+        },
        "ROUTING": "multichat.routing.channel_routing", # We will create it in a moment
     },
 }

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}{% endblock %}</title>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <header>
+        <h1>{% block header_text %}{% endblock %}</h1>
+        {% if user.is_authenticated %}
+            <div> Hi {{ user.username }} Section Key: {{ request.session.session_key }}</div>
+            <a href="{% url 'logout' %}">Logout</a>
+        {% endif %}
+    </header>
+    <section>
+        {% block content %}
+            <div id="text_container"></div>
+            <input id="input" type="text"></input>
+            <button onclick="sendText()">Click me</button>
+        {% endblock %}
+    </section>
+    {% block extra_body %}{% endblock %}
+
+    {% block scripts %}
+        {% load static %}
+        <script src="{% static "js/vendor/jquery-3.2.1.min.js" %}"></script>
+        <script>
+            
+            $(document).ready(function() {
+                $('#input').keydown(function(event) {
+                    if (event.keyCode == 13) {
+                        sendText();
+                        return false;
+                     }
+                });
+            });
+
+            var username = '{{ user.username }}';
+            var socket = new WebSocket("ws://" + window.location.host + "/{{ room_id }}/?username=" + username);
+
+            var sendText = function(){
+                var message = $('#input').val();
+                $('#input').val('');
+                socket.send(message);
+            }
+            socket.onmessage = function(e) {
+                console.log(e.data);
+                $('<div>').html(JSON.parse(e.data).username + ': ' + JSON.parse(e.data).text).appendTo($('#text_container'));
+            }
+            socket.onopen = function() {
+                socket.send("hello world");
+            }
+            // Call onopen directly if socket is already open
+            if (socket.readyState == WebSocket.OPEN) socket.onopen();
+        </script>
+    {% endblock %}
+</body>
+</html>

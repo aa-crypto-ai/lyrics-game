@@ -16,6 +16,26 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 
+from django.http import HttpResponse
+
+#from multichat.routing import channel_routing
+from django.conf.urls import include
+from django.contrib.auth import views as auth_views
+
+import datetime
+
+from lyrics import views as lyrics_view
+
+def current_datetime(request):
+    now = datetime.datetime.now()
+    html = "<html><body>It is now %s.</body></html>" % now
+    return HttpResponse(html + request.user.username)
+
 urlpatterns = [
+    url(r'^login/$', auth_views.login, name='login'),
+    url(r'^logout/$', auth_views.logout, name='logout'),
     url(r'^admin/', admin.site.urls),
+    url(r'^test/', current_datetime),
+    url(r'^room/(?P<room_id>[0-9]+)/$', lyrics_view.room_view),
+    # url(r'^chat/', include('multichat.routing')),
 ]
