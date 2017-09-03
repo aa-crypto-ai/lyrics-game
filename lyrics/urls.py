@@ -28,4 +28,5 @@ urlpatterns = [
     url(r'^all/$', lyrics_view.all_songs_view),
     url(r'^import/$', lyrics_view.import_lyrics_view),
     url(r'^song/(?P<song_id>[0-9]+)/$', lyrics_view.song_view),
+    url(r'^test/(?P<room_id>[0-9]+)/$', lyrics_view.play_view),
 ]

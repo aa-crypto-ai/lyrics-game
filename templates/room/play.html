@@ -1,17 +1,93 @@
 {% extends 'templates/room/base.html' %}
 
 {% block title %}
-    {{ song.singers.all | join:'//' }} - {{ song.name }}
+    估歌詞
 {% endblock %}
 
 {% block header_text %}
-    {{ song.singers.all | join:'//' }} - {{ song.name }}
+    估歌詞
+{% endblock %}
+
+{% block style %}
+<style>
+    #container {
+        margin: auto;
+        width: 700px;
+        height: 700px;
+    }
+    #guess_container {
+        float: left;
+        height: 500px;
+        overflow: scroll;
+    }
+    #lyrics_play {
+        height: 500px;
+        overflow: scroll;
+    }
+</style>
 {% endblock %}
 
 {% block content %}
 
-    <div id='name'>{{ song.name }}</div>
-    <div id='singer'>{{ song.singers.all | join:'//' }}</div>
-    <div id='lyrics'>{{ song.lyrics }}</div>
+    <div id='container'>
+        <div id='guess_container'>
+            <input id="input" type="text"></input>
+            <button onclick="sendText()">Send</button>
+            <div id="text_container"></div>
+            
+        </div>
+        <div id='lyrics_play'></div>
+    </div>
 
+{% endblock %}
+
+{% block scripts %}
+    {% load static %}
+    <script src="{% static "js/vendor/jquery-3.2.1.min.js" %}"></script>
+    <script>
+        
+        $(document).ready(function() {
+            $('#input').keydown(function(event) {
+                if (event.keyCode == 13) {
+                    sendText();
+                    return false;
+                 }
+            });
+        });
+
+        var username = '{{ user.username }}';
+        var socket = new WebSocket("ws://" + window.location.host + "/{{ room.id }}/?username=" + username);
+
+        var sendText = function(){
+            var message = $('#input').val();
+            $('#input').val('');
+            socket.send(JSON.stringify({"command": "guess", "text": message}));
+        }
+        socket.onmessage = function(e) {
+            var data = JSON.parse(e.data)
+            if (data.command == 'guess'){
+                $('<div>').html(data.username + ': ' + data.text).appendTo($('#text_container'));
+            } else if(data.username == username && data.command == 'join'){
+                for ( var i = 0; i < data.prev_entries.length ; ++i ) {
+                    var prev_entry = data.prev_entries[i];
+                    $('<div>').html(prev_entry.username + ': ' + prev_entry.text).appendTo($('#text_container'));
+                }
+            }
+
+            $('#lyrics_play').html('');
+
+            var lyrics_entries = data.guessed_lyrics;
+            lyrics_entries.forEach(function(entry, idx){
+                $('<div>').html(entry).attr('id', 'entry_'+idx).appendTo('#lyrics_play')
+            })
+
+        }
+        socket.onopen = function() {
+            socket.send(
+                JSON.stringify({"command": "join"})
+            );
+        }
+        // Call onopen directly if socket is already open
+        if (socket.readyState == WebSocket.OPEN) socket.onopen();
+    </script>
 {% endblock %}

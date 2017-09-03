@@ -4,7 +4,8 @@ from player.models import Player
 from lyrics.models import Song, Singer, LyricsWord
 
 def separate_lyrics(lyrics):
-    lyrics_group = re.split('([\u00ff-\uffff]|\S+)', lyrics);
+    lyrics_group = re.split(ur'([\u00ff-\uffff]|\S+)', lyrics);
+    print len(lyrics_group), lyrics_group
     return [char.strip() for char in lyrics_group if char.strip()]
 
 def import_lyrics(lyrics_data, singers_data, year_data, name_data, player):
