@@ -45,7 +45,7 @@ def get_guessed_lyrics(room_id):
                 guessed = True
                 break
         if not guessed:
-            guessed_lyrics.append('----')
+            guessed_lyrics.append('???')
 
     return guessed_lyrics
 

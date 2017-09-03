@@ -12,19 +12,25 @@
 <style>
     #container {
         margin: auto;
-        width: 700px;
+        width: 900px;
         height: 500px;
     }
     #text_container {
         position: relative;
-        min-height: 400px;
+        min-height: 460px;
+        height: 80%;
     }
     #guess_container {
         position: relative;
         float: left;
-        width: 300px;
+        width: 200px;
         height: 500px;
-        overflow-y: scroll;
+    }
+    #guess_entries {
+        overflow-y:auto;
+        max-height:100%;
+        bottom: 0;
+        left: 0;
     }
     #guess_box_container {
         position: absolute;
@@ -35,6 +41,16 @@
         height: 500px;
         overflow-y: scroll;
     }
+    .word {
+        display: inline-block;
+        width: 80px;
+    }
+    #input {
+        width: 100px;
+    }
+    .hidden {
+        color: gray;
+    }
 </style>
 {% endblock %}
 
@@ -42,7 +58,9 @@
 
     <div id='container'>
         <div id='guess_container'>
-            <div id="text_container"></div>
+            <div id="text_container">
+                <div id="guess_entries"></div>
+            </div>
             <div id="guess_box_container">
                 <input id="input" type="text"></input>
                 <button onclick="sendText()">Send</button>
@@ -79,19 +97,22 @@
         socket.onmessage = function(e) {
             var data = JSON.parse(e.data)
             if (data.command == 'guess'){
-                $('<div>').html(data.username + ': ' + data.text).appendTo($('#text_container'));
+                $('<div>').html(data.username + ': ' + data.text).appendTo($('#guess_entries'));
             } else if(data.username == username && data.command == 'join'){
                 for ( var i = 0; i < data.prev_entries.length ; ++i ) {
                     var prev_entry = data.prev_entries[i];
-                    $('<div>').html(prev_entry.username + ': ' + prev_entry.text).appendTo($('#text_container'));
+                    $('<div>').html(prev_entry.username + ': ' + prev_entry.text).appendTo($('#guess_entries'));
                 }
             }
+            $('#guess_entries').animate({scrollTop: $('#guess_entries').prop('scrollHeight')});
 
             $('#lyrics_play').html('');
 
             var lyrics_entries = data.guessed_lyrics;
             lyrics_entries.forEach(function(entry, idx){
-                $('<div>').html(entry).attr('id', 'entry_'+idx).appendTo('#lyrics_play')
+                var div = $('<div>').html(entry).attr('id', 'entry_'+idx).addClass('word');
+                if (entry == '???') div.addClass('hidden');
+                div.appendTo('#lyrics_play')
             })
 
         }
