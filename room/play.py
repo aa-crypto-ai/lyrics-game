@@ -18,7 +18,6 @@ def process_entry(entry, room_id, username):
 
     entry = Entry.objects.create(game=game, player=player, entry=entry)
     entry.save()
-    print entry
 
     return True
 
@@ -37,12 +36,11 @@ def get_guessed_lyrics(room_id):
     guessed_lyrics = []
 
     for lyrics in all_lyrics:
-        # print lyrics
+
         guessed = False
-        # guessed_lyrics.append(lyrics.word)
-        # continue
+
         for e in entries.all():
-            if e.entry == lyrics.word:
+            if e.entry.lower() == lyrics.word.lower():
                 guessed_lyrics.append(lyrics.word)
                 guessed = True
                 break

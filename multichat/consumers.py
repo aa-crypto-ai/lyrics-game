@@ -1,36 +1,3 @@
-# from django.http import HttpResponse
-# from channels.handler import AsgiHandler
-
-# def http_consumer(message):
-#     # Make standard HTTP response - access ASGI path attribute directly
-#     response = HttpResponse("Hello world! You asked for %s" % message.content['path'])
-#     # Encode that response into message format (ASGI)
-#     for chunk in AsgiHandler.encode_response(response):
-#         message.reply_channel.send(chunk)
-
-
-
-
-# from channels import Group
-
-# # Connected to websocket.connect
-# def ws_connect(message):
-#     # Accept the connection
-#     message.reply_channel.send({"accept": True})
-#     # Add to the chat group
-#     Group("chat").add(message.reply_channel)
-
-# # Connected to websocket.receive
-# def ws_message(message):
-#     Group("chat").send({
-#         "text": "[user] %s" % message.content['text'],
-#     })
-
-# # Connected to websocket.disconnect
-# def ws_disconnect(message):
-#     Group("chat").discard(message.reply_channel)
-
-
 import json
 from channels import Group
 from channels.sessions import channel_session
@@ -43,8 +10,6 @@ from channels.security.websockets import allowed_hosts_only
 from channels import Channel
 
 from room.play import process_entry, get_guessed_lyrics, get_prev_entries
-# Connected to websocket.connect
-# @channel_session
 
 # Connected to chat-messages
 def msg_consumer(message):
@@ -69,12 +34,9 @@ def ws_connect(message, room_id):
         message.reply_channel.send({"close": True})
 
 # Connected to websocket.receive
-# @channel_session
-
 @channel_session_user
 def ws_message(message, room_id):
 
-    # print message['text']['command']
     data = json.loads(message['text'])
     command = data['command']
     username = message.channel_session["username"]
@@ -100,8 +62,6 @@ def ws_message(message, room_id):
     Channel('chat-messages').send(send_info)
 
 # Connected to websocket.disconnect
-# @channel_session
 @channel_session_user
-# def ws_disconnect(message):
 def ws_disconnect(message, room_id):
     Group("chat-%s" % room_id).discard(message.reply_channel)

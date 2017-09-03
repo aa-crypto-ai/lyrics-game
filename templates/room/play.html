@@ -13,16 +13,27 @@
     #container {
         margin: auto;
         width: 700px;
-        height: 700px;
+        height: 500px;
+    }
+    #text_container {
+        position: relative;
+        min-height: 400px;
     }
     #guess_container {
+        position: relative;
         float: left;
+        width: 300px;
         height: 500px;
-        overflow: scroll;
+        overflow-y: scroll;
+    }
+    #guess_box_container {
+        position: absolute;
+        bottom: 0;
+        left: 0;
     }
     #lyrics_play {
         height: 500px;
-        overflow: scroll;
+        overflow-y: scroll;
     }
 </style>
 {% endblock %}
@@ -31,9 +42,11 @@
 
     <div id='container'>
         <div id='guess_container'>
-            <input id="input" type="text"></input>
-            <button onclick="sendText()">Send</button>
             <div id="text_container"></div>
+            <div id="guess_box_container">
+                <input id="input" type="text"></input>
+                <button onclick="sendText()">Send</button>
+            </div>
             
         </div>
         <div id='lyrics_play'></div>

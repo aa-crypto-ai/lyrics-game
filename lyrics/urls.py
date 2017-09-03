@@ -14,13 +14,6 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf.urls import url
-from django.contrib import admin
-
-from django.http import HttpResponse
-
-#from multichat.routing import channel_routing
-from django.conf.urls import include
-from django.contrib.auth import views as auth_views
 
 from lyrics import views as lyrics_view
 
@@ -28,5 +21,4 @@ urlpatterns = [
     url(r'^all/$', lyrics_view.all_songs_view),
     url(r'^import/$', lyrics_view.import_lyrics_view),
     url(r'^song/(?P<song_id>[0-9]+)/$', lyrics_view.song_view),
-    url(r'^test/(?P<room_id>[0-9]+)/$', lyrics_view.play_view),
 ]

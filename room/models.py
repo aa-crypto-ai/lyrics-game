@@ -33,7 +33,7 @@ class Entry(models.Model):
         return self.timestamp.strftime('%b %-d %-I:%M %p')
 
     def as_dict(self):
-        return {'entry': self.entry, 'timestamp': self.formatted_timestamp} # 'handle': self.handle
+        return {'entry': self.entry, 'timestamp': self.formatted_timestamp}
 
     def __unicode__(self):
         return u'%s: %s (%s)' % (self.game, self.entry, self.player)

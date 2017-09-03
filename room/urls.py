@@ -14,13 +14,6 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf.urls import url
-from django.contrib import admin
-
-from django.http import HttpResponse
-
-#from multichat.routing import channel_routing
-from django.conf.urls import include
-from django.contrib.auth import views as auth_views
 
 from room import views as room_view
 
