@@ -7,7 +7,7 @@ from django.contrib.auth.models import (
 )
 
 class PlayerManager(BaseUserManager):
-    def create_user(self, email, password=None):
+    def create_user(self, email, username, nickname, password=None):
         """
         Creates and saves a User with the given email, date of
         birth and password.
@@ -17,19 +17,23 @@ class PlayerManager(BaseUserManager):
 
         user = self.model(
             email=self.normalize_email(email),
+            username=username,
+            nickname=nickname,
         )
 
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, password):
+    def create_superuser(self, email, username, nickname, password):
         """
         Creates and saves a superuser with the given email, date of
         birth and password.
         """
         user = self.create_user(
             email,
+            username=username,
+            nickname=nickname,
             password=password,
         )
         user.is_admin = True
@@ -42,25 +46,26 @@ class Player(AbstractBaseUser):
         max_length=255,
         unique=True,
     )
-    # date_of_birth = models.DateField()
+    nickname = models.CharField(max_length=20, unique=True)
+    username = models.SlugField(max_length=50, unique=True)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
 
     objects = PlayerManager()
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = ['username', 'nickname']
 
     def get_full_name(self):
         # The user is identified by their email address
-        return self.email
+        return self.username
 
     def get_short_name(self):
         # The user is identified by their email address
-        return self.email
+        return self.nickname
 
     def __str__(self):              # __unicode__ on Python 2
-        return self.email
+        return self.username
 
     def has_perm(self, perm, obj=None):
         "Does the user have a specific permission?"
