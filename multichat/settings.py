@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'channels',
     'lyrics',
+    'room',
     'player',
     'django.contrib.admin',
     'django.contrib.auth',
