@@ -7,12 +7,16 @@ from django.utils import timezone
 class Song(models.Model):
     name = models.CharField(max_length=100)
     year = models.IntegerField()
-    lyrics = models.CharField(max_length=1000)
     # use ISO-639-3 standard
     language = models.CharField(max_length=3)
 
     timestamp = models.DateTimeField('Date Added', default=timezone.now)
     added_by = models.ForeignKey(Player, null=True, related_name='songs')
+
+    @property
+    def lyrics(self):
+        return ''.join([str(lyrics) for lyrics in self.lyrics_words.all().order_by('position')])
+
     def __unicode__(self):
         return self.name
 
@@ -25,7 +29,7 @@ class Singer(models.Model):
 
 class LyricsWord(models.Model):
     song = models.ForeignKey(Song, on_delete=models.CASCADE, related_name="lyrics_words")
-    lyric_position = models.IntegerField()
+    position = models.IntegerField()
     word = models.CharField(max_length=70)
 
     def __unicode__(self):

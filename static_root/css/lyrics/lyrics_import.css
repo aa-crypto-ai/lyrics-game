@@ -1,0 +1,27 @@
+#lyrics_input_container {
+    float:left;
+    margin-left: 10px;
+    width: 500px;
+    height: 700px;
+    display: inline-block;
+}
+#lyrics_input {
+    width: 380px;
+    height: 700px;
+    overflow: scroll;
+    padding: 0px 5px 580px;
+}
+#lyrics_display_container {
+    
+    margin-left: 10px;
+    width: 500px;
+    height: 700px;
+    display:inline-block;
+}
+#lyrics_display {
+    margin-left: 10px;
+    width: 480px;
+    height: 600px;
+    overflow: scroll;
+    vertical-align: top;
+}

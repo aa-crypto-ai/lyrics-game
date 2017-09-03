@@ -1,0 +1,17 @@
+{% extends 'templates/lyrics/base.html' %}
+
+{% block title %}
+    {{ song.singers.all | join:'//' }} - {{ song.name }}
+{% endblock %}
+
+{% block header_text %}
+    {{ song.singers.all | join:'//' }} - {{ song.name }}
+{% endblock %}
+
+{% block content %}
+
+    <div id='name'>{{ song.name }}</div>
+    <div id='singer'>{{ song.singers.all | join:'//' }}</div>
+    <div id='lyrics'>{{ song.lyrics }}</div>
+
+{% endblock %}

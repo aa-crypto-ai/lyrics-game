@@ -1,0 +1,18 @@
+{% extends 'templates/lyrics/base.html' %}
+
+{% block title %} Import Lyrics {% endblock %}
+
+{% block extra_head_scripts %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static "css/lyrics/lyrics_import.css" %}">
+{% endblock %}
+
+{% block content %}
+    <div id="lyrics_input_container">
+        <form action="/lyrics/import/" method="post">
+            {% csrf_token %}
+            {{ form }}
+            <input type="submit" value="Submit" />
+        </form>
+    </div>
+{% endblock %}

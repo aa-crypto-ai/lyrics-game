@@ -1,0 +1,28 @@
+{% extends 'templates/lyrics/base.html' %}
+
+{% block title %}
+    All Songs
+{% endblock %}
+
+{% block header_text %}
+    Song List
+{% endblock %}
+
+{% block content %}
+
+    <div id='songs_table' class='table_view'>
+        <div class='thead'>
+            <div class='tcell'>Name</div>
+            <div class='tcell'>Singers</div>
+            <div class='tcell'>Lyrics</div>
+        </div>
+        {% for song in songs %}
+            <div class='trows'>
+                <div class='tcell'><a href="../song/{{ song.id }}">{{ song.name }}</a></div>
+                <div class='tcell'>{{ song.singers.all | join:'//' }}</div>
+                <div class='tcell'>{{ song.lyrics }}</div>
+            </div>
+        {% endfor %}
+    </div>
+
+{% endblock %}
