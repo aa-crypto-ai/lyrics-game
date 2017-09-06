@@ -54,7 +54,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'multichat.urls'
-LOGIN_REDIRECT_URL = '/test'
+LOGIN_REDIRECT_URL = '/room/1/play/'
 
 TEMPLATES = [
     {
@@ -106,6 +106,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 AUTH_USER_MODEL = 'player.Player'
+LOGIN_URL = '/login/'
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/

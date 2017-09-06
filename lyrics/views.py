@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
 
 from django import forms
 
@@ -10,13 +11,8 @@ from lyrics.models import Song
 from lyrics.db_manage import import_lyrics
 from player.models import Player
 
-def play_view(request, room_id):
-
-    return render(request, 'templates/lyrics/play.html', {
-        'room_id': int(room_id),
-    })
-
 # Create your views here.
+@login_required
 def all_songs_view(request):
 
     songs = Song.objects.all()
@@ -25,6 +21,7 @@ def all_songs_view(request):
         'songs': songs,
     })
 
+@login_required
 def song_view(request, song_id):
 
     song = Song.objects.get(id=song_id)
@@ -33,6 +30,7 @@ def song_view(request, song_id):
         'song': song,
     })
 
+@login_required
 def import_lyrics_view(request):
 
     if request.method == 'POST':

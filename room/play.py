@@ -39,13 +39,17 @@ def get_guessed_lyrics(room_id):
 
         guessed = False
 
+        if lyrics.word == '\n':
+            guessed_lyrics.append('\n')
+            continue
+
         for e in entries.all():
             if e.entry.lower() == lyrics.word.lower():
                 guessed_lyrics.append(lyrics.word)
                 guessed = True
                 break
         if not guessed:
-            guessed_lyrics.append('???')
+            guessed_lyrics.append('?')
 
     return guessed_lyrics
 

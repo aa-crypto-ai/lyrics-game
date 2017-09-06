@@ -43,7 +43,12 @@
     }
     .word {
         display: inline-block;
-        width: 80px;
+    }
+    .word:lang(yue) {
+        width:20px;
+    }
+    .word:lang(eng) {
+        width:80px;
     }
     #input {
         width: 100px;
@@ -109,10 +114,23 @@
             $('#lyrics_play').html('');
 
             var lyrics_entries = data.guessed_lyrics;
+            var lineIdx = 0;
+            var div = $('<div>').attr('id', 'line_'+lineIdx).addClass('line').appendTo('#lyrics_play');
+
             lyrics_entries.forEach(function(entry, idx){
-                var div = $('<div>').html(entry).attr('id', 'entry_'+idx).addClass('word');
-                if (entry == '???') div.addClass('hidden');
-                div.appendTo('#lyrics_play')
+                
+                var span = $('<span>').html(entry).attr('id', 'entry_'+idx).addClass('word');
+
+                if (entry == '?') span.addClass('hidden');
+                
+                span.attr('lang', '{{ song.language }}');
+
+                if (entry == '\n'){
+                    lineIdx++;
+                    div = $('<div>').attr('id', 'line_'+lineIdx).addClass('line').appendTo('#lyrics_play');
+                }else{
+                    span.appendTo('#line_'+lineIdx);
+                }
             })
 
         }

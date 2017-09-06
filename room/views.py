@@ -1,9 +1,9 @@
 from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
 
-# from lyrics.models import Song
-# from player.models import Player
 from room.models import Room, Entry
 
+@login_required
 def play_view(request, room_id):
 
     room_id = int(room_id)
