@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 
@@ -7,27 +8,30 @@
 <head>
     <title>{% block title %}{% endblock %}</title>
     <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}" media="screen" />
     {% block extra_head_scripts %} {% endblock %}
 </head>
 <body>
-    <header>
+    <div id="menu_container">
+        <div class="menu"><a href="#room" class="active">Rooms</a></div>
+        <div class="menu"><a href="#profile">Profile</a></div>
+        <div class="menu"><a href="#settings">Settings</a></div>
+        <div class="menu"><a href="{% url 'logout' %}">Log Out</a></div>
+    </div>
+    <div id="header">
         <h1>{% block header_text %}{% endblock %}</h1>
         {% if user.is_authenticated %}
             <div> Hi {{ user.username }}</div>
-            <div>Section Key: {{ request.session.session_key }}</div>
-            <a href="{% url 'logout' %}">Logout</a>
-            <br><br>
         {% endif %}
-    </header>
-    <section>
+    </div>
+    <div id="container">
         {% block content %}
         {% endblock %}
-    </section>
+    </div>
     {% block extra_body %}{% endblock %}
 
     {% block scripts %}
-        {% load static %}
-        <script src="{% static "js/vendor/jquery-3.2.1.min.js" %}"></script>
+        <script src="{% static 'js/vendor/jquery-3.2.1.min.js' %}"></script>
     {% endblock %}
 </body>
 </html>

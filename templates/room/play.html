@@ -1,4 +1,5 @@
 {% extends 'templates/room/base.html' %}
+{% load static %}
 
 {% block title %}
     估歌詞
@@ -8,77 +9,25 @@
     估歌詞
 {% endblock %}
 
-{% block style %}
-<style>
-    #container {
-        margin: auto;
-        width: 900px;
-        height: 500px;
-    }
-    #text_container {
-        position: relative;
-        min-height: 460px;
-        height: 80%;
-    }
-    #guess_container {
-        position: relative;
-        float: left;
-        width: 200px;
-        height: 500px;
-    }
-    #guess_entries {
-        overflow-y:auto;
-        max-height:100%;
-        bottom: 0;
-        left: 0;
-    }
-    #guess_box_container {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-    }
-    #lyrics_play {
-        height: 500px;
-        overflow-y: scroll;
-    }
-    .word {
-        display: inline-block;
-    }
-    .word:lang(yue) {
-        width:20px;
-    }
-    .word:lang(eng) {
-        width:80px;
-    }
-    #input {
-        width: 100px;
-    }
-    .hidden {
-        color: gray;
-    }
-</style>
+{% block extra_head_scripts %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/room/play.css' %}" media="screen" />
 {% endblock %}
 
 {% block content %}
 
-    <div id='container'>
-        <div id='guess_container'>
-            <div id="text_container">
-                <div id="guess_entries"></div>
-            </div>
-            <div id="guess_box_container">
-                <input id="input" type="text"></input>
-                <button onclick="sendText()">Send</button>
-            </div>
-            
+    <div id='guess_container'>
+        <div id="guess_entries"></div>
+        <div id="guess_box_container">
+            <input id="input" type="text"></input>
+            <button onclick="sendText()">Send</button>
         </div>
-        <div id='lyrics_play'></div>
+
     </div>
+    <div id='lyrics_play'></div>
 
 {% endblock %}
 
 {% block scripts %}
-    {% load static %}
     <script src="{% static "js/vendor/jquery-3.2.1.min.js" %}"></script>
     <script>
         
