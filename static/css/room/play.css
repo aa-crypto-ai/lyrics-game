@@ -37,3 +37,10 @@
 .hidden {
     color: gray;
 }
+
+.event_join {
+    color: green;
+}
+.event_left {
+    color: red;
+}

@@ -58,6 +58,13 @@
                     $('<div>').html(prev_entry.nickname + ': ' + prev_entry.text).appendTo($('#guess_entries'));
                 }
             }
+            if ( data.command == 'join' ){
+                $('<div>').html('-- ' + data.nickname + ' joined --').addClass('event_join').appendTo($('#guess_entries'));
+            }
+            console.log(data.command);
+            if ( data.command == 'leave' ){
+                $('<div>').html('-- ' + data.nickname + ' left --').addClass('event_left').appendTo($('#guess_entries'));
+            }
             $('#guess_entries').animate({scrollTop: $('#guess_entries').prop('scrollHeight')});
 
             $('#lyrics_play').html('');
@@ -85,7 +92,7 @@
         }
         socket.onopen = function() {
             socket.send(
-                JSON.stringify({"command": "join"})
+                JSON.stringify({"command": "join", "username": username, "text": ""})
             );
         }
         // Call onopen directly if socket is already open

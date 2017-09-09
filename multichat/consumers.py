@@ -67,4 +67,8 @@ def ws_message(message, room_id):
 # Connected to websocket.disconnect
 @channel_session_user
 def ws_disconnect(message, room_id):
+    username = message.channel_session["username"]
+    player = Player.objects.get(username=username)
+
+    Channel('chat-messages').send({'command': 'leave', 'username': username, 'nickname': player.nickname, 'room_id': room_id})
     Group("chat-%s" % room_id).discard(message.reply_channel)
