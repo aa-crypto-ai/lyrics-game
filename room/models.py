@@ -8,6 +8,7 @@ class Room(models.Model):
     label = models.SlugField(unique=True)
     timestamp = models.DateTimeField('Date Created', default=timezone.now)
     status = models.CharField(max_length=10)
+    players = models.ManyToManyField(Player)
 
     def __unicode__(self):
         return '%s - %s' % (self.label, self.name)
