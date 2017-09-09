@@ -63,4 +63,4 @@ def get_prev_entries(room_id):
 
     entries = Entry.objects.filter(game=game).order_by('timestamp')
 
-    return [{'text': entry, 'username': username} for (entry, username) in entries.values_list('entry', 'player__username')]
+    return [{'text': entry, 'nickname': nickname} for (entry, nickname) in entries.values_list('entry', 'player__nickname')]

@@ -51,11 +51,11 @@
         socket.onmessage = function(e) {
             var data = JSON.parse(e.data)
             if (data.command == 'guess'){
-                $('<div>').html(data.username + ': ' + data.text).appendTo($('#guess_entries'));
+                $('<div>').html(data.nickname + ': ' + data.text).appendTo($('#guess_entries'));
             } else if(data.username == username && data.command == 'join'){
                 for ( var i = 0; i < data.prev_entries.length ; ++i ) {
                     var prev_entry = data.prev_entries[i];
-                    $('<div>').html(prev_entry.username + ': ' + prev_entry.text).appendTo($('#guess_entries'));
+                    $('<div>').html(prev_entry.nickname + ': ' + prev_entry.text).appendTo($('#guess_entries'));
                 }
             }
             $('#guess_entries').animate({scrollTop: $('#guess_entries').prop('scrollHeight')});

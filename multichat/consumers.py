@@ -10,6 +10,7 @@ from channels.security.websockets import allowed_hosts_only
 from channels import Channel
 
 from room.play import process_entry, get_guessed_lyrics, get_prev_entries
+from player.models import Player
 
 # Connected to chat-messages
 def msg_consumer(message):
@@ -40,6 +41,7 @@ def ws_message(message, room_id):
     data = json.loads(message['text'])
     command = data['command']
     username = message.channel_session["username"]
+    player = Player.objects.get(username=username)
 
     if command != 'join':
         entry = data['text']
@@ -49,6 +51,7 @@ def ws_message(message, room_id):
 
     send_info = {
         "username": username,
+        "nickname": player.nickname,
         "room_id": room_id,
         "guessed_lyrics": guessed_lyrics,
         "command": command,
