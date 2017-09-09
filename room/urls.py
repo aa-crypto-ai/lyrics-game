@@ -18,5 +18,6 @@ from django.conf.urls import url
 from room import views as room_view
 
 urlpatterns = [
-    url(r'^(?P<room_id>[0-9]+)/play/$', room_view.play_view),
+    url(r'^(?P<room_id>[0-9]+)/$', room_view.play_view),
+    url(r'^$', room_view.list_view, name='room'),
 ]

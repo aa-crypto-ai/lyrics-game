@@ -1,0 +1,49 @@
+/* table styles */
+.table {
+    display: table;
+}
+.thead {
+    display: table-header-group;
+    font-weight: bold;
+    background-color: #222;
+    color: white;
+}
+.trows {
+    display: table-row-group;
+}
+.trow {
+    display: table-row;
+}
+.cell {
+    display: table-cell;
+    text-align: center;
+    border: solid 1px #ddd;
+    padding: 5px 10px;
+}
+
+.trow a{
+    padding-left: 10px;
+    padding-right: 10px;
+    background-color: #ddd;
+    color: black;
+    text-decoration: underline;
+
+}
+
+/* cell styles */
+.id {
+    width: 30px;
+}
+
+.name {
+    text-align: left;
+    width: 300px;
+}
+
+.owner {
+    width: 100px;
+}
+
+.n_players, .n_games, .status {
+    width: 60px;
+}
