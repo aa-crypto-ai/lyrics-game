@@ -9,6 +9,7 @@ class Room(models.Model):
     timestamp = models.DateTimeField('Date Created', default=timezone.now)
     status = models.CharField(max_length=10)
     players = models.ManyToManyField(Player)
+    owner = models.ForeignKey(Player, related_name='rooms')
 
     def __unicode__(self):
         return '%s - %s' % (self.label, self.name)
