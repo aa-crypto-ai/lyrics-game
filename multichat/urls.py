@@ -27,5 +27,4 @@ urlpatterns = [
     url(r'^room/', include('room.urls')),
     url(r'^lyrics/', include('lyrics.urls')),
     url(r'^player/', include('player.urls')),
-    url(r'^', RedirectView.as_view(pattern_name='room', permanent=False)),
 ]
