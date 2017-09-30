@@ -1,14 +1,11 @@
 from django.shortcuts import render
 
-# from lyrics.models import Song
-# from player.models import Player
 from room.models import Entry, Room
 from player.models import Player
 
 
-def process_entry(entry, room_id, username):
+def process_entry(word, room_id, username):
 
-    
     player = Player.objects.get(username=username)
     room = Room.objects.get(id=room_id)
     games = room.games.filter(status='active')
@@ -16,10 +13,12 @@ def process_entry(entry, room_id, username):
         raise Exception('more than 1 games active')
     game = games[0]
 
-    entry = Entry.objects.create(game=game, player=player, entry=entry)
+    entry = Entry.objects.create(game=game, player=player, entry=word)
     entry.save()
 
-    return True
+    lyrics = game.song.lyrics_words.filter(word=word)
+
+    return list(lyrics.values_list('position', flat=True))
 
 def get_guessed_lyrics(room_id):
     room = Room.objects.get(id=room_id)

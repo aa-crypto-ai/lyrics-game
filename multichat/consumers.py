@@ -43,24 +43,25 @@ def ws_message(message, room_id):
     username = message.channel_session["username"]
     player = Player.objects.get(username=username)
 
-    if command != 'join':
-        entry = data['text']
-        process_entry(entry, room_id, username)
-
-    guessed_lyrics = get_guessed_lyrics(room_id)
-
     send_info = {
         "username": username,
         "nickname": player.nickname,
         "room_id": room_id,
-        "guessed_lyrics": guessed_lyrics,
         "command": command,
     }
 
-    if command != 'join':
-        send_info['text'] = entry
-    else:
+    if command == 'guess':
+        word = data['text']
+        positions = process_entry(word, room_id, username)
+
+        send_info['positions'] = positions
+        send_info['word'] = word
+
+    if command == 'join':
+
+        guessed_lyrics = get_guessed_lyrics(room_id)
         send_info['prev_entries'] = get_prev_entries(room_id)
+        send_info['guessed_lyrics'] = guessed_lyrics
 
     Channel('chat-messages').send(send_info)
 

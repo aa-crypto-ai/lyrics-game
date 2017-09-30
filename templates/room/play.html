@@ -50,44 +50,54 @@
         }
         socket.onmessage = function(e) {
             var data = JSON.parse(e.data)
-            if (data.command == 'guess'){
-                $('<div>').html(data.nickname + ': ' + data.text).appendTo($('#guess_entries'));
-            } else if(data.username == username && data.command == 'join'){
+
+            if(data.username == username && data.command == 'join'){
                 for ( var i = 0; i < data.prev_entries.length ; ++i ) {
                     var prev_entry = data.prev_entries[i];
                     $('<div>').html(prev_entry.nickname + ': ' + prev_entry.text).appendTo($('#guess_entries'));
                 }
+
+                // show the whole lyrics now
+
+                var lyrics_entries = data.guessed_lyrics;
+                var lineIdx = 0;
+                var div = $('<div>').attr('id', 'line_'+lineIdx).addClass('line').appendTo('#lyrics_play');
+
+                lyrics_entries.forEach(function(entry, idx){
+
+                    var span = $('<span>').html(entry).attr('id', 'entry_'+idx).addClass('word');
+
+                    if (entry == '?') span.addClass('hidden');
+
+                    span.attr('lang', '{{ song.language }}');
+
+                    if (entry == '\n'){
+                        lineIdx++;
+                        div = $('<div>').attr('id', 'line_'+lineIdx).addClass('line').appendTo('#lyrics_play');
+                    }else{
+                        span.appendTo('#line_'+lineIdx);
+                    }
+                })
             }
-            if ( data.command == 'join' ){
+
+            if(data.username != username && data.command == 'join'){
                 $('<div>').html('-- ' + data.nickname + ' joined --').addClass('event_join').appendTo($('#guess_entries'));
             }
-            console.log(data.command);
+
+            if (data.command == 'guess'){
+                $('<div>').html(data.nickname + ': ' + data.word).appendTo($('#guess_entries'));
+                entry = data.word;
+                data.positions.forEach(function(position){
+                    $('#entry_' + position).text(data.word).removeClass('hidden');
+                })
+
+            }
+
             if ( data.command == 'leave' ){
                 $('<div>').html('-- ' + data.nickname + ' left --').addClass('event_left').appendTo($('#guess_entries'));
             }
             $('#guess_entries').animate({scrollTop: $('#guess_entries').prop('scrollHeight')});
 
-            $('#lyrics_play').html('');
-
-            var lyrics_entries = data.guessed_lyrics;
-            var lineIdx = 0;
-            var div = $('<div>').attr('id', 'line_'+lineIdx).addClass('line').appendTo('#lyrics_play');
-
-            lyrics_entries.forEach(function(entry, idx){
-                
-                var span = $('<span>').html(entry).attr('id', 'entry_'+idx).addClass('word');
-
-                if (entry == '?') span.addClass('hidden');
-                
-                span.attr('lang', '{{ song.language }}');
-
-                if (entry == '\n'){
-                    lineIdx++;
-                    div = $('<div>').attr('id', 'line_'+lineIdx).addClass('line').appendTo('#lyrics_play');
-                }else{
-                    span.appendTo('#line_'+lineIdx);
-                }
-            })
 
         }
         socket.onopen = function() {
