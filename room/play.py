@@ -13,12 +13,15 @@ def process_entry(word, room_id, username):
         raise Exception('more than 1 games active')
     game = games[0]
 
+    exist = (Entry.objects.filter(game=game, entry=word).count() > 0)
     entry = Entry.objects.create(game=game, player=player, entry=word)
-    entry.save()
 
     lyrics = game.song.lyrics_words.filter(word=word)
 
-    return list(lyrics.values_list('position', flat=True))
+    return {
+        'positions': list(lyrics.values_list('position', flat=True)),
+        'exist': exist,
+    }
 
 def get_guessed_lyrics(room_id):
     room = Room.objects.get(id=room_id)

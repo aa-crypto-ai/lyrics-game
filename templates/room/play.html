@@ -65,7 +65,7 @@
 
                 lyrics_entries.forEach(function(entry, idx){
 
-                    var span = $('<span>').html(entry).attr('id', 'entry_'+idx).addClass('word');
+                    var span = $('<span>').html(entry).attr('id', 'word_'+idx).addClass('word');
 
                     if (entry == '?') span.addClass('hidden');
 
@@ -85,10 +85,20 @@
             }
 
             if (data.command == 'guess'){
-                $('<div>').html(data.nickname + ': ' + data.word).appendTo($('#guess_entries'));
+                var wordSpan = $('<span>').html(data.word);
+                var entryDiv = $('<div>').html(data.nickname + ': ').addClass('entry');
+
+                if (data.exist){
+                    wordSpan.addClass('guessed');
+                }
+                if (data.positions.length > 0) {
+                    wordSpan.addClass('correct');
+                }
+                wordSpan.appendTo(entryDiv);
+                entryDiv.appendTo($('#guess_entries'));
                 entry = data.word;
                 data.positions.forEach(function(position){
-                    $('#entry_' + position).text(data.word).removeClass('hidden');
+                    $('#word_' + position).text(data.word).removeClass('hidden');
                 })
 
             }

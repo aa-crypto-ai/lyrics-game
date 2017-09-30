@@ -52,9 +52,10 @@ def ws_message(message, room_id):
 
     if command == 'guess':
         word = data['text']
-        positions = process_entry(word, room_id, username)
+        entry_result = process_entry(word, room_id, username)
 
-        send_info['positions'] = positions
+        send_info['positions'] = entry_result['positions']
+        send_info['exist'] = entry_result['exist']
         send_info['word'] = word
 
     if command == 'join':

@@ -44,3 +44,22 @@
 .event_left {
     color: red;
 }
+
+.entry span:not(.guessed):not(.correct) {
+    background-color: #ff9999;
+    font-weight: bold;
+}
+
+.guessed.correct {
+    background-color: #99ff99;
+}
+
+.correct:not(.guessed) {
+    background-color: #99ff99;
+    font-weight: bold;
+}
+
+.guessed:not(.correct) {
+    background-color: #ff9999;
+}
+
