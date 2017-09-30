@@ -1,0 +1,17 @@
+{% extends 'templates/base.html' %}
+
+{% block title %} Update Profile {% endblock %}
+
+{% block content %}
+    <div id="user_profile_container">
+        <form action="/player/edit/" method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Submit" />
+        </form>
+
+        {% if updated %}
+            Profile Updated!
+        {% endif %}
+    </div>
+{% endblock %}
