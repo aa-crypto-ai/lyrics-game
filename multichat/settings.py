@@ -54,7 +54,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'multichat.urls'
-LOGIN_REDIRECT_URL = '/index'
+LOGIN_REDIRECT_URL = '/room'
 
 TEMPLATES = [
     {
