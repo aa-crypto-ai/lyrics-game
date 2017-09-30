@@ -54,7 +54,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'multichat.urls'
-LOGIN_REDIRECT_URL = '/room/1/play/'
+LOGIN_REDIRECT_URL = '/room/1/'
 
 TEMPLATES = [
     {
@@ -142,7 +142,7 @@ CHANNEL_LAYERS = {
         # This example app uses the Redis channel layer implementation asgi_redis
         "BACKEND": "asgi_redis.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [(redis_host, 6379)],
+            "hosts": [(redis_host, 16379)],
         },
        "ROUTING": "multichat.routing.channel_routing", # We will create it in a moment
     },
