@@ -11,8 +11,6 @@ from lyrics.models import Song
 from lyrics.db_manage import import_lyrics
 from player.models import Player
 
-# Create your views here.
-@login_required
 def all_songs_view(request):
 
     songs = Song.objects.all()
@@ -21,7 +19,6 @@ def all_songs_view(request):
         'songs': songs,
     })
 
-@login_required
 def song_view(request, song_id):
 
     song = Song.objects.get(id=song_id)
@@ -30,7 +27,6 @@ def song_view(request, song_id):
         'song': song,
     })
 
-@login_required
 def import_lyrics_view(request):
 
     if request.method == 'POST':

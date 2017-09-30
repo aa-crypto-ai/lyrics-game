@@ -14,11 +14,13 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf.urls import url
+from django.contrib.auth.decorators import login_required
 
 from lyrics import views as lyrics_view
 
+
 urlpatterns = [
-    url(r'^all/$', lyrics_view.all_songs_view),
-    url(r'^import/$', lyrics_view.import_lyrics_view),
-    url(r'^song/(?P<song_id>[0-9]+)/$', lyrics_view.song_view),
+    url(r'^all/$', login_required(lyrics_view.all_songs_view)),
+    url(r'^import/$', login_required(lyrics_view.import_lyrics_view)),
+    url(r'^song/(?P<song_id>[0-9]+)/$', login_required(lyrics_view.song_view)),
 ]
