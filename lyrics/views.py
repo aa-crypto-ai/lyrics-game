@@ -9,7 +9,7 @@ import re
 import pytz, datetime
 
 from lyrics.models import Song
-from lyrics.db_manage import import_lyrics
+from lyrics.db_manage import import_lyrics_to_db
 from player.models import Player
 
 @user_passes_test(lambda u: u.is_admin)
@@ -43,7 +43,8 @@ def import_lyrics_view(request):
             year_data = form.cleaned_data['year']
             name_data = form.cleaned_data['name']
 
-            success = import_lyrics(lyrics_data, singers_data, year_data, name_data, player)
+            cleaned_lyrics = separate_lyrics(lyrics_data, format='textarea')
+            success = import_lyrics_to_db(cleaned_lyrics, singers_data, year_data, name_data, player)
 
             if success:
                 return HttpResponse('Import Song <%s>: Success' % name_data)

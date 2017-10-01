@@ -3,25 +3,49 @@ import re
 from player.models import Player
 from lyrics.models import Song, Singer, LyricsWord
 
-def separate_lyrics(lyrics):
-    lyrics_group = re.split(ur'([\u00ff-\uffff]|\S+)', lyrics);
+def separate_lyrics(lyrics, format='textarea'):
+    if format == 'textarea':
+        lyrics_group = re.split(ur'([\u00ff-\uffff]|\S+)', lyrics);
 
-    chars = []
+        chars = []
 
-    for char in lyrics_group:
+        for char in lyrics_group:
 
-        if char.find('\n') > -1:
+            if char.find('\n') > -1:
+                chars.append('\n')
+                continue
+
+            if char.strip():
+                chars.append(char.strip())
+
+        return chars
+
+    if format == 'kkbox':
+        chars = []
+        for phrase in lyrics:
+            if not phrase.strip():
+                continue
+            lyrics_group = re.split(ur'([\u00ff-\uffff]|\S+)', phrase);
+            # neglect lines with colon, these are listing names of backstage staff
+            if u'\uff1a' in lyrics_group or ':' in lyrics_group:
+                continue
+            for char in lyrics_group:
+                if char.strip():
+                    chars.append(char.strip())
             chars.append('\n')
-            continue
 
-        if char.strip():
-            chars.append(char.strip())
+        return chars
 
-    return chars
+def import_lyrics_to_db(lyrics_data, singers_data, year_data, name_data, player):
+    if ',' in singers_data and '&' in singers_data:
+        raise Exception('singers field has both , and &')
+    if ',' in singers_data:
+        singers = [singer.strip() for singer in singers_data.split(',') if singer.strip()]
+    elif '&' in singers_data:
+        singers = [singer.strip() for singer in singers_data.split('&') if singer.strip()]
+    else:
+        singers = [singers_data.strip()]
 
-def import_lyrics(lyrics_data, singers_data, year_data, name_data, player):
-    lyrics_group = separate_lyrics(lyrics_data)
-    singers = [singer.strip() for singer in singers_data.split(',') if singer.strip()]
     year = int(year_data)
     name = name_data.strip()
 
@@ -37,12 +61,8 @@ def import_lyrics(lyrics_data, singers_data, year_data, name_data, player):
         singer_obj = Singer(name=singer, song=song)
         singer_obj.save()
 
-    for position, lyrics_word in enumerate(lyrics_group):
-        lyrics_obj = LyricsWord(
-            song=song,
-            word=lyrics_word,
-            position=position,
-        )
-        lyrics_obj.save()
+    LyricsWord.objects.bulk_create(
+        [LyricsWord(song=song, word=lyrics_word, position=position) for position, lyrics_word in enumerate(lyrics_data)]
+    )
 
     return True
