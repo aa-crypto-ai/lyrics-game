@@ -24,13 +24,10 @@
 }
 .word {
     display: inline-block;
+    margin: 2px;
+    min-width: 16px;
 }
-.word:lang(yue) {
-    width:20px;
-}
-.word:lang(eng) {
-    width:80px;
-}
+
 #input {
     width: 100px;
 }
