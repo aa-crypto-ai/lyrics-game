@@ -21,5 +21,6 @@ from room import views as room_view
 urlpatterns = [
     url(r'^game/(?P<game_id>[0-9]+)/$', login_required(room_view.play_view), name='game_play'),
     url(r'^(?P<room_id>[0-9]+)/$', login_required(room_view.room_view), name='room_view'),
+    url(r'^create_game/$', login_required(room_view.create_game), name='create_game'),
     url(r'^$', login_required(room_view.list_view), name='room'),
 ]

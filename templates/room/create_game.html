@@ -1,0 +1,13 @@
+{% extends 'templates/lyrics/base.html' %}
+
+{% block title %} Import Lyrics {% endblock %}
+
+{% block content %}
+    <div id="game_create_container">
+        <form action="/room/create_game/" method="post">
+            {% csrf_token %}
+            {{ form }}
+            <input type="submit" value="Submit" />
+        </form>
+    </div>
+{% endblock %}

@@ -1,10 +1,13 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
+from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect
 
 from room.models import Entry, Game, Room
 from player.models import Player
 
-from tables import RoomTable, GameTable
+from room.tables import RoomTable, GameTable
+from room.forms import GameForm
 
 def play_view(request, game_id):
 
@@ -40,4 +43,23 @@ def list_view(request):
     return render(request, 'templates/room/list.html', {
         'rooms': rooms,
         'table': table,
+    })
+
+def create_game(request):
+
+    if request.method == 'POST':
+
+        form = GameForm(request.user, request.POST)
+
+        if form.is_valid():
+            form.save()
+            room_id = form.data['room']
+
+            return HttpResponseRedirect(reverse('room_view', args=[room_id]))
+
+    else:
+        form = GameForm(request.user)
+
+    return render(request, 'templates/room/create_game.html', {
+        'form': form,
     })

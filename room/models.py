@@ -25,7 +25,7 @@ class Game(models.Model):
     end_timestamp = models.DateTimeField('Time ended', default=timezone.now)
     room = models.ForeignKey(Room, related_name='games')
     song = models.ForeignKey(Song, on_delete=models.CASCADE, related_name='games')
-    status = models.CharField(max_length=10)
+    status = models.CharField(max_length=10, default='active')
 
     def __unicode__(self):
         return u'%s in Room %s' % (self.song, self.room)

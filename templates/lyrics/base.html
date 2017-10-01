@@ -10,7 +10,6 @@
         <h1>{% block header_text %}{% endblock %}</h1>
         {% if user.is_authenticated %}
             <div> Hi {{ user.username }}</div>
-            <div>Section Key: {{ request.session.session_key }}</div>
             <a href="{% url 'logout' %}">Logout</a>
             <br><br>
         {% endif %}

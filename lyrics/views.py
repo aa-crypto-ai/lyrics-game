@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
 
-from django import forms
+from lyrics.forms import LyricsForm
 
 import re
 import pytz, datetime
@@ -56,10 +56,3 @@ def import_lyrics_view(request):
     return render(request, 'templates/lyrics/import.html', {
         'form': form,
     })
-
-class LyricsForm(forms.Form):
-
-    name = forms.CharField(widget=forms.TextInput(attrs={'size': 55}))
-    singers = forms.CharField(widget=forms.TextInput(attrs={'size': 55}))
-    year = forms.CharField(widget=forms.TextInput(attrs={'size': 55}))
-    lyrics = forms.CharField(widget=forms.Textarea(attrs={'rows': 35, 'cols': 65}))
