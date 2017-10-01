@@ -1,9 +1,8 @@
 #lyrics_input_container {
-    float:left;
+    margin-auto;
     margin-left: 10px;
     width: 500px;
     height: 700px;
-    display: inline-block;
 }
 #lyrics_input {
     width: 380px;

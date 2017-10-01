@@ -1,0 +1,50 @@
+/* overall style */
+body {
+    max-width: 800px;
+    min-width: 500px;
+    height: 100%;
+    margin: auto;
+}
+
+/* menu style */
+
+#menu_container {
+    /*list-style-type: none;*/
+    margin: 10px auto;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333333;
+
+}
+
+.menu {
+    float: left;
+    width: 25%;
+    padding: 10px 0px;
+    text-align: center;
+    border: solid #444444 2px;
+    -webkit-box-sizing: border-box;
+       -moz-box-sizing: border-box;
+            box-sizing: border-box;
+}
+
+.menu a {
+    color: white;
+    text-decoration: none;
+}
+
+.menu a:hover {
+    color: #fef602;
+}
+
+/* header style */
+
+#header {
+}
+
+#container {
+    margin: auto;
+    max-height: 500px;
+    height: 20%;
+    overflow: hidden;
+}

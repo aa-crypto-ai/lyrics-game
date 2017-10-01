@@ -1,0 +1,65 @@
+#guess_container {
+    position: relative;
+    float: left;
+    width: 200px;
+    max-height: 500px;
+}
+#guess_entries {
+    overflow-y:auto;
+    bottom: 0;
+    left: 0;
+    height: 450px;
+    margin-bottom: 50px;
+}
+#guess_box_container {
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+}
+#lyrics_play {
+    min-width: 300px;
+    max-width: 600px;
+    max-height: 500px;
+    overflow-y: auto;
+}
+.word {
+    display: inline-block;
+}
+.word:lang(yue) {
+    width:20px;
+}
+.word:lang(eng) {
+    width:80px;
+}
+#input {
+    width: 100px;
+}
+.hidden {
+    color: gray;
+}
+
+.event_join {
+    color: green;
+}
+.event_left {
+    color: red;
+}
+
+.entry span:not(.guessed):not(.correct) {
+    background-color: #ff9999;
+    font-weight: bold;
+}
+
+.guessed.correct {
+    background-color: #99ff99;
+}
+
+.correct:not(.guessed) {
+    background-color: #99ff99;
+    font-weight: bold;
+}
+
+.guessed:not(.correct) {
+    background-color: #ff9999;
+}
+
