@@ -9,7 +9,7 @@ from player.models import Player
 from room.tables import RoomTable, GameTable
 from room.forms import GameForm
 
-def play_view(request, game_id):
+def play_view(request, room_id, game_id):
 
     game_id = int(game_id)
     game = Game.objects.get(id=game_id)

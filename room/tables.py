@@ -21,7 +21,7 @@ class RoomTable(tables.Table):
 class GameTable(tables.Table):
 
     start_timestamp = tables.Column(verbose_name='Time Created')
-    id = tables.LinkColumn('game_play', text=lambda record: str(record.id), args=[A('id')])
+    id = tables.LinkColumn('game_play', text=lambda record: str(record.id), args=[A('room.id'), A('id')])
 
     class Meta:
         model = Game
