@@ -6,10 +6,9 @@ class GameForm(forms.ModelForm):
     def __init__(self, player, data=None, *args, **kwargs):
         self.player = player
 
-        self.room = forms.ModelChoiceField(queryset=Room.objects.filter(players=self.player), required=True, help_text="Room")
-        self.song = forms.ModelChoiceField(queryset=Song.objects.filter(added_by=self.player), required=True, help_text="Song")
-
         super(GameForm, self).__init__(data=data, *args, **kwargs)
+        self.fields['room'].queryset = self.fields['room'].queryset.filter(players=self.player)
+        self.fields['song'].queryset = self.fields['song'].queryset.filter(added_by=self.player)
 
     class Meta:
         model = Game
