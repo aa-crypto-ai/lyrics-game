@@ -1,27 +1,27 @@
 /* table styles */
-.table {
+table {
     display: table;
 }
-.thead {
+thead {
     display: table-header-group;
     font-weight: bold;
     background-color: #222;
     color: white;
 }
-.trows {
+tbody {
     display: table-row-group;
 }
-.trow {
+tr {
     display: table-row;
 }
-.cell {
+td {
     display: table-cell;
     text-align: center;
     border: solid 1px #ddd;
     padding: 5px 10px;
 }
 
-.trow a{
+tr a{
     padding-left: 10px;
     padding-right: 10px;
     background-color: #ddd;
@@ -37,7 +37,8 @@
 
 .name {
     text-align: left;
-    width: 300px;
+    padding-left: 10px;
+    width: 250px;
 }
 
 .owner {
@@ -46,4 +47,8 @@
 
 .n_players, .n_games, .status {
     width: 60px;
+}
+
+.timestamp {
+    width: 160px;
 }

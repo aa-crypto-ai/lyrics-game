@@ -15,40 +15,7 @@
 
 {% block content %}
 
-    <div id='table_container' class='table'>
-        <div id='table_header_groups' class='thead'>
-            <div id="table_row" class='trow'>
-                <div class='cell'>ID</div>
-                <div class='cell'>Status</div>
-                <div class='cell'>Time Created</div>
-            </div>
-        </div>
-        <div id="table_rows" class='trows'>
-        </div>
-    </div>
+    {% load django_tables2 %}
+    {% render_table table %}
 
-{% endblock %}
-
-{% block scripts %}
-    {{ block.super }}
-    <script>
-
-        var createTableRow = function(id, status, ts){
-
-            var row = $('<div>').attr('id', 'row_'+id).addClass('trow').appendTo($('#table_rows'));
-
-            var element = $('<a>').attr('href', window.location.origin + '/room/game/' + id).text(id);
-            var div = $('<div>').attr('id', 'id_'+id).addClass('cell id').html(element.get(0)).appendTo(row);
-
-            var div = $('<div>').attr('id', 'status_'+id).addClass('cell status').text(status).appendTo(row);
-            var div = $('<div>').attr('id', 'ts_'+id).addClass('cell ts').text(ts).appendTo(row);
-        }
-
-        {% for game in games %}
-            var id = {{ game.id }};
-            var status = '{{ game.status }}';
-            var ts = '{{ game.start_timestamp }}';
-            createTableRow(id, status, ts);
-        {% endfor %}
-    </script>
 {% endblock %}

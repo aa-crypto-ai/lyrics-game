@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'lyrics',
     'room',
     'player',
+    'django_tables2',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

@@ -15,50 +15,7 @@
 
 {% block content %}
 
-    <div id='table_container' class='table'>
-        <div id='table_header_groups' class='thead'>
-            <div id="table_row" class='trow'>
-                <div class='cell'>ID</div>
-                <div class='cell'>Name</div>
-                <div class='cell'>Owner</div>
-                <div class='cell'>No. of players</div>
-                <div class='cell'>No. of games</div>
-                <div class='cell'>Status</div>
-            </div>
-        </div>
-        <div id="table_rows" class='trows'>
-        </div>
-    </div>
+    {% load django_tables2 %}
+    {% render_table table %}
 
-{% endblock %}
-
-{% block scripts %}
-    {{ block.super }}
-    <script>
-
-        var createTableRow = function(id, name, owner, nPlayers, nGames, status){
-
-            var row = $('<div>').attr('id', 'row_'+id).addClass('trow').appendTo($('#table_rows'));
-
-            var element = $('<a>').attr('href', id).text(id);
-            var div = $('<div>').attr('id', 'id_'+id).addClass('cell id').html(element.get(0)).appendTo(row);
-
-            var div = $('<div>').attr('id', 'name_'+id).addClass('cell name').text(name).appendTo(row);
-            var div = $('<div>').attr('id', 'owner_'+id).addClass('cell owner').text(owner).appendTo(row);
-            var div = $('<div>').attr('id', 'n_players_'+id).addClass('cell n_players').text(nPlayers).appendTo(row);
-            var div = $('<div>').attr('id', 'n_games_'+id).addClass('cell n_games').text(nGames).appendTo(row);
-            var div = $('<div>').attr('id', 'status_'+id).addClass('cell status').text(status).appendTo(row);
-        }
-
-        {% for room in rooms %}
-            var id = {{ room.id }};
-            var name = '{{ room.name }}';
-            var owner = '{{ room.owner.nickname }}';
-            var nPlayers = {{ room.players.all | length }};
-            var nGames = {{ room.games.all | length }};
-            var status = '{{ room.status }}';
-            console.log(id, name, owner, nPlayers, nGames, status);
-            createTableRow(id, name, owner, nPlayers, nGames, status);
-        {% endfor %}
-    </script>
 {% endblock %}

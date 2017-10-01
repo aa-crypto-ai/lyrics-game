@@ -11,6 +11,12 @@ class Room(models.Model):
     players = models.ManyToManyField(Player)
     owner = models.ForeignKey(Player, related_name='rooms')
 
+    def get_players_length(self):
+        return self.players.count()
+
+    def get_games_length(self):
+        return self.games.count()
+
     def __unicode__(self):
         return '%s - %s' % (self.label, self.name)
 
