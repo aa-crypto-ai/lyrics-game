@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import user_passes_test
 
 from django import forms
 
@@ -11,6 +12,7 @@ from lyrics.models import Song
 from lyrics.db_manage import import_lyrics
 from player.models import Player
 
+@user_passes_test(lambda u: u.is_admin)
 def all_songs_view(request):
 
     songs = Song.objects.all()
@@ -19,6 +21,7 @@ def all_songs_view(request):
         'songs': songs,
     })
 
+@user_passes_test(lambda u: u.is_admin)
 def song_view(request, song_id):
 
     song = Song.objects.get(id=song_id)
