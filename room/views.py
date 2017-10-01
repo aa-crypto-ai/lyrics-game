@@ -36,8 +36,7 @@ def room_view(request, room_id):
     })
 
 def list_view(request):
-    player = Player.objects.get(username=request.user.username)
-    rooms = Room.objects.filter(players=player)
+    rooms = Room.objects.filter(players=request.user)
     table = RoomTable(rooms)
 
     return render(request, 'templates/room/list.html', {
