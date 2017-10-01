@@ -9,7 +9,7 @@ from channels.security.websockets import allowed_hosts_only
 
 from channels import Channel
 
-from room.play import process_entry, get_guessed_lyrics, get_prev_entries, convert_guessed_lyrics_to_html
+from room.play import process_entry, get_guessed_lyrics, get_prev_entries, convert_guessed_lyrics_to_html, convert_prev_entries_to_html
 from player.models import Player
 
 # Connected to chat-messages
@@ -65,7 +65,11 @@ def ws_message(message, game_id):
 
         lyrics_lines = get_guessed_lyrics(game_id)
         lyrics_lines_html = convert_guessed_lyrics_to_html(lyrics_lines)
-        send_info['prev_entries'] = get_prev_entries(game_id)
+
+        prev_entries = get_prev_entries(game_id)
+        prev_entries_html = convert_prev_entries_to_html(prev_entries)
+
+        send_info['prev_entries_html'] = prev_entries_html
         send_info['lyrics_html'] = lyrics_lines_html
 
     Channel('chat-messages').send(send_info)

@@ -52,10 +52,9 @@
             var data = JSON.parse(e.data)
 
             if(data.username == username && data.command == 'join'){
-                for ( var i = 0; i < data.prev_entries.length ; ++i ) {
-                    var prev_entry = data.prev_entries[i];
-                    $('<div>').html(prev_entry.nickname + ': ' + prev_entry.text).appendTo($('#guess_entries'));
-                }
+
+                // show prev entries
+                $('#guess_entries').html(data.prev_entries_html);
 
                 // show the whole lyrics now
                 $('#lyrics_play').html(data.lyrics_html);

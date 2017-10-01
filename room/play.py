@@ -87,3 +87,12 @@ def get_prev_entries(game_id):
     entries = Entry.objects.filter(game=game).order_by('timestamp')
 
     return [{'text': entry, 'nickname': nickname} for (entry, nickname) in entries.values_list('entry', 'player__nickname')]
+
+def convert_prev_entries_to_html(prev_entries):
+    doc, tag, text = Doc().tagtext()
+
+    for entry in prev_entries:
+        with tag('div'):
+            text('%(nickname)s: %(text)s' % entry)
+
+    return doc.getvalue()
