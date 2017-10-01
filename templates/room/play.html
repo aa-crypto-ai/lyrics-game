@@ -41,7 +41,7 @@
         });
 
         var username = '{{ user.username }}';
-        var socket = new WebSocket("ws://" + window.location.host + "/{{ room.id }}/?username=" + username);
+        var socket = new WebSocket("ws://" + window.location.host + "/{{ game.id }}/?username=" + username);
 
         var sendText = function(){
             var message = $('#input').val();

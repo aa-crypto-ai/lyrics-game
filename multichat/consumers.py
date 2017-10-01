@@ -14,13 +14,13 @@ from player.models import Player
 
 # Connected to chat-messages
 def msg_consumer(message):
-    room_id = message.content['room_id']
+    game_id = message.content['game_id']
     # Broadcast to listening sockets
-    Group("chat-%s" % room_id).send({"text": json.dumps(message.content)})
+    Group("chat-%s" % game_id).send({"text": json.dumps(message.content)})
 
 @allowed_hosts_only
 @channel_session_user_from_http
-def ws_connect(message, room_id):
+def ws_connect(message, game_id):
     # Accept connection
     message.reply_channel.send({"accept": True})
     # Parse the query string
@@ -29,14 +29,14 @@ def ws_connect(message, room_id):
         # Set the username in the session
         message.channel_session["username"] = params[b"username"][0].decode("utf8")
         # Add the user to the room_name group
-        Group("chat-%s" % room_id).add(message.reply_channel)
+        Group("chat-%s" % game_id).add(message.reply_channel)
     else:
         # Close the connection.
         message.reply_channel.send({"close": True})
 
 # Connected to websocket.receive
 @channel_session_user
-def ws_message(message, room_id):
+def ws_message(message, game_id):
 
     data = json.loads(message['text'])
     command = data['command']
@@ -46,13 +46,13 @@ def ws_message(message, room_id):
     send_info = {
         "username": username,
         "nickname": player.nickname,
-        "room_id": room_id,
+        "game_id": game_id,
         "command": command,
     }
 
     if command == 'guess':
         word = data['text']
-        entry_result = process_entry(word, room_id, username)
+        entry_result = process_entry(word, game_id, username)
 
         send_info['positions_words'] = entry_result['positions_words']
         send_info['exist'] = entry_result['exist']
@@ -60,18 +60,18 @@ def ws_message(message, room_id):
 
     if command == 'join':
 
-        lyrics_lines = get_guessed_lyrics(room_id)
-        lyrics_lines_html = convert_guessed_lyrics_to_html(lyrics_lines, room_id)
-        send_info['prev_entries'] = get_prev_entries(room_id)
+        lyrics_lines = get_guessed_lyrics(game_id)
+        lyrics_lines_html = convert_guessed_lyrics_to_html(lyrics_lines)
+        send_info['prev_entries'] = get_prev_entries(game_id)
         send_info['lyrics_html'] = lyrics_lines_html
 
     Channel('chat-messages').send(send_info)
 
 # Connected to websocket.disconnect
 @channel_session_user
-def ws_disconnect(message, room_id):
+def ws_disconnect(message, game_id):
     username = message.channel_session["username"]
     player = Player.objects.get(username=username)
 
-    Channel('chat-messages').send({'command': 'leave', 'username': username, 'nickname': player.nickname, 'room_id': room_id})
-    Group("chat-%s" % room_id).discard(message.reply_channel)
+    Channel('chat-messages').send({'command': 'leave', 'username': username, 'nickname': player.nickname, 'game_id': game_id})
+    Group("chat-%s" % game_id).discard(message.reply_channel)

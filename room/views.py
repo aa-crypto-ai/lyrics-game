@@ -1,15 +1,14 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 
-from room.models import Room, Entry
+from room.models import Entry, Game, Room
 from player.models import Player
 
-@login_required
-def play_view(request, room_id):
+def play_view(request, game_id):
 
-    room_id = int(room_id)
-    room = Room.objects.get(id=room_id)
-    game = room.games.all()[0]
+    game_id = int(game_id)
+    game = Game.objects.get(id=game_id)
+    room = game.room
     song = game.song
     entries = Entry.objects.filter(game=game)
 
@@ -18,6 +17,16 @@ def play_view(request, room_id):
         'game': game,
         'song': song,
         'entries': entries,
+    })
+
+def room_view(request, room_id):
+
+    room = Room.objects.get(id=room_id)
+    games = room.games.all().order_by('id')
+
+    return render(request, 'templates/room/view.html', {
+        'room': room,
+        'games': games,
     })
 
 def list_view(request):

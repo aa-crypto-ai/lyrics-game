@@ -1,20 +1,16 @@
 from django.shortcuts import render
 
-from room.models import Entry, Room
+from room.models import Entry, Room, Game
 from player.models import Player
 
 from yattag import Doc
 from itertools import groupby
 
 
-def process_entry(word, room_id, username):
+def process_entry(word, game_id, username):
 
     player = Player.objects.get(username=username)
-    room = Room.objects.get(id=room_id)
-    games = room.games.filter(status='active')
-    if len(games) != 1:
-        raise Exception('more than 1 games active')
-    game = games[0]
+    game = Game.objects.get(id=game_id)
 
     exist = (Entry.objects.filter(game=game, entry__iexact=word).count() > 0)
     entry = Entry.objects.create(game=game, player=player, entry=word)
@@ -26,12 +22,8 @@ def process_entry(word, room_id, username):
         'exist': exist,
     }
 
-def get_guessed_lyrics(room_id):
-    room = Room.objects.get(id=room_id)
-    games = room.games.filter(status='active')
-    if len(games) != 1:
-        raise Exception('more than 1 games active')
-    game = games[0]
+def get_guessed_lyrics(game_id):
+    game = Game.objects.get(id=game_id)
 
     entries = Entry.objects.filter(game=game)
 
@@ -61,17 +53,11 @@ def get_guessed_lyrics(room_id):
     lyrics_lines = [list(group) for k, group in groupby(result, lambda x: x == "\n") if not k]  # k is False if it matches the splitter
     return lyrics_lines
 
-def convert_guessed_lyrics_to_html(lyrics_lines, room_id):
+def convert_guessed_lyrics_to_html(lyrics_lines):
     """ guessed_lyrics is a list of strings, with unknown represented as '?', and line break as '\n'
 
         return a html string
     """
-    room = Room.objects.get(id=room_id)
-    games = room.games.filter(status='active')
-    if len(games) != 1:
-        raise Exception('more than 1 games active')
-    game = games[0]
-    language = game.song.language
 
     doc, tag, text = Doc().tagtext()
 
@@ -81,23 +67,19 @@ def convert_guessed_lyrics_to_html(lyrics_lines, room_id):
         with tag('div', id='line_%d' % line_idx, klass='line'):
             for c in line:
                 if c == '':
-                    with tag('span', id='word_%d' % word_idx, klass='word hidden', lang=language):
+                    with tag('span', id='word_%d' % word_idx, klass='word hidden'):
                         text('?')
                 else:
-                    with tag('span', id='word_%d' % word_idx, klass='word', lang=language):
+                    with tag('span', id='word_%d' % word_idx, klass='word'):
                         text(c)
                 word_idx = word_idx + 1
             word_idx = word_idx + 1
 
     return doc.getvalue()
 
-def get_prev_entries(room_id):
+def get_prev_entries(game_id):
 
-    room = Room.objects.get(id=room_id)
-    games = room.games.filter(status='active')
-    if len(games) != 1:
-        raise Exception('more than 1 games active')
-    game = games[0]
+    game = Game.objects.get(id=game_id)
 
     entries = Entry.objects.filter(game=game).order_by('timestamp')
 
