@@ -9,6 +9,9 @@ from itertools import groupby
 
 def process_entry(word, game_id, username):
 
+    if not word.strip():
+        return None
+
     player = Player.objects.get(username=username)
     game = Game.objects.get(id=game_id)
 

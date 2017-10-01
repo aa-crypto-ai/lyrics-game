@@ -54,6 +54,9 @@ def ws_message(message, game_id):
         word = data['text']
         entry_result = process_entry(word, game_id, username)
 
+        if entry_result is None:
+            return
+
         send_info['positions_words'] = entry_result['positions_words']
         send_info['exist'] = entry_result['exist']
         send_info['word'] = word
