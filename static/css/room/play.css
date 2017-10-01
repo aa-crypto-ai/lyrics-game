@@ -60,3 +60,22 @@
     background-color: #ff9999;
 }
 
+.correct_guess {
+    background-color: white;
+    -webkit-animation-name: guess; /* Safari 4.0 - 8.0 */
+    -webkit-animation-duration: 4s; /* Safari 4.0 - 8.0 */
+    animation-name: guess;
+    animation-duration: 4s;
+}
+
+/* Safari 4.0 - 8.0 */
+@-webkit-keyframes guess {
+    from {background-color: #99ff99;}
+    to {background-color: white;}
+}
+
+/* Standard syntax */
+@keyframes guess {
+    from {background-color: #99ff99;}
+    to {background-color: white;}
+}

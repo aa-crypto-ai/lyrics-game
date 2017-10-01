@@ -70,6 +70,7 @@
                 var wordSpan = $('<span>').html(data.word);
                 var entryDiv = $('<div>').html(data.nickname + ': ').addClass('entry');
 
+                // add to list of guessed entries
                 if (data.exist){
                     wordSpan.addClass('guessed');
                 }
@@ -79,9 +80,12 @@
                 wordSpan.appendTo(entryDiv);
                 entryDiv.appendTo($('#guess_entries'));
 
-                data.positions_words.forEach(function(entry){
-                    $('#word_' + entry.position).text(entry.word).removeClass('hidden');
-                })
+                // add to lyrics window
+                if ( !data.exist ) {
+                    data.positions_words.forEach(function(entry){
+                        $('#word_' + entry.position).text(entry.word).removeClass('hidden').addClass('correct_guess');
+                    })
+                }
 
             }
 
