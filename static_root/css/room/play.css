@@ -2,13 +2,12 @@
     position: relative;
     float: left;
     width: 200px;
-    max-height: 500px;
+    max-height: calc(100vh - 200px);
 }
 #guess_entries {
+    position: relative;
     overflow-y:auto;
-    bottom: 0;
-    left: 0;
-    height: 450px;
+    height: calc(100vh - 300px);
     margin-bottom: 50px;
 }
 #guess_box_container {
@@ -19,7 +18,7 @@
 #lyrics_play {
     min-width: 300px;
     max-width: 600px;
-    max-height: 500px;
+    max-height: 90%;
     overflow-y: auto;
 }
 .word {
