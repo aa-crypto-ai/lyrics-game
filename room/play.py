@@ -16,13 +16,13 @@ def process_entry(word, room_id, username):
         raise Exception('more than 1 games active')
     game = games[0]
 
-    exist = (Entry.objects.filter(game=game, entry=word).count() > 0)
+    exist = (Entry.objects.filter(game=game, entry__iexact=word).count() > 0)
     entry = Entry.objects.create(game=game, player=player, entry=word)
 
-    lyrics = game.song.lyrics_words.filter(word=word)
+    lyrics = game.song.lyrics_words.filter(word__iexact=word)
 
     return {
-        'positions': list(lyrics.values_list('position', flat=True)),
+        'positions_words': list(lyrics.values('position', 'word')),
         'exist': exist,
     }
 
@@ -43,7 +43,7 @@ def get_guessed_lyrics(room_id):
             'entry': 'room_entry.entry',
         },
         tables=['room_entry'],
-        where=['room_entry.game_id = %d AND lyrics_lyricsword.word = room_entry.entry' % game.id]
+        where=['room_entry.game_id = %d AND lower(lyrics_lyricsword.word) = lower(room_entry.entry)' % game.id]
     )
     words_count = all_lyrics.count()
     line_breaks_pos = all_lyrics.filter(word='\n').values_list('position', flat=True)

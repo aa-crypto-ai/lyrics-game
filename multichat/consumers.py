@@ -54,7 +54,7 @@ def ws_message(message, room_id):
         word = data['text']
         entry_result = process_entry(word, room_id, username)
 
-        send_info['positions'] = entry_result['positions']
+        send_info['positions_words'] = entry_result['positions_words']
         send_info['exist'] = entry_result['exist']
         send_info['word'] = word
 

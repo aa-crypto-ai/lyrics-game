@@ -73,14 +73,14 @@
                 if (data.exist){
                     wordSpan.addClass('guessed');
                 }
-                if (data.positions.length > 0) {
+                if (data.positions_words.length > 0) {
                     wordSpan.addClass('correct');
                 }
                 wordSpan.appendTo(entryDiv);
                 entryDiv.appendTo($('#guess_entries'));
-                entry = data.word;
-                data.positions.forEach(function(position){
-                    $('#word_' + position).text(data.word).removeClass('hidden');
+
+                data.positions_words.forEach(function(entry){
+                    $('#word_' + entry.position).text(entry.word).removeClass('hidden');
                 })
 
             }
