@@ -43,4 +43,5 @@ txaio==2.8.1
 wcwidth==0.1.7
 websocket-client==0.44.0
 win-unicode-console==0.5
+yattag==1.9.0
 zope.interface==4.4.2

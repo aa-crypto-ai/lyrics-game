@@ -3,6 +3,9 @@ from django.shortcuts import render
 from room.models import Entry, Room
 from player.models import Player
 
+from yattag import Doc
+from itertools import groupby
+
 
 def process_entry(word, room_id, username):
 
@@ -35,25 +38,58 @@ def get_guessed_lyrics(room_id):
     song = game.song
     all_lyrics = song.lyrics_words.order_by('position')
 
-    guessed_lyrics = []
+    guessed_words = all_lyrics.extra(
+        select={
+            'entry': 'room_entry.entry',
+        },
+        tables=['room_entry'],
+        where=['room_entry.game_id = %d AND lyrics_lyricsword.word = room_entry.entry' % game.id]
+    )
+    words_count = all_lyrics.count()
+    line_breaks_pos = all_lyrics.filter(word='\n').values_list('position', flat=True)
 
-    for lyrics in all_lyrics:
+    result = [''] * words_count
 
-        guessed = False
+    def map_to_result_str(data):
+        position, word = data
+        result[position] = word
 
-        if lyrics.word == '\n':
-            guessed_lyrics.append('\n')
-            continue
+    map(map_to_result_str, list(guessed_words.values_list('position', 'word')))
+    for pos in line_breaks_pos:
+        result[pos] = '\n'
 
-        for e in entries.all():
-            if e.entry.lower() == lyrics.word.lower():
-                guessed_lyrics.append(lyrics.word)
-                guessed = True
-                break
-        if not guessed:
-            guessed_lyrics.append('?')
+    lyrics_lines = [list(group) for k, group in groupby(result, lambda x: x == "\n") if not k]  # k is False if it matches the splitter
+    return lyrics_lines
 
-    return guessed_lyrics
+def convert_guessed_lyrics_to_html(lyrics_lines, room_id):
+    """ guessed_lyrics is a list of strings, with unknown represented as '?', and line break as '\n'
+
+        return a html string
+    """
+    room = Room.objects.get(id=room_id)
+    games = room.games.filter(status='active')
+    if len(games) != 1:
+        raise Exception('more than 1 games active')
+    game = games[0]
+    language = game.song.language
+
+    doc, tag, text = Doc().tagtext()
+
+    word_idx = 0
+
+    for line_idx, line in enumerate(lyrics_lines):
+        with tag('div', id='line_%d' % line_idx, klass='line'):
+            for c in line:
+                if c == '':
+                    with tag('span', id='word_%d' % word_idx, klass='word hidden', lang=language):
+                        text('?')
+                else:
+                    with tag('span', id='word_%d' % word_idx, klass='word', lang=language):
+                        text(c)
+                word_idx = word_idx + 1
+            word_idx = word_idx + 1
+
+    return doc.getvalue()
 
 def get_prev_entries(room_id):
 

@@ -58,26 +58,8 @@
                 }
 
                 // show the whole lyrics now
+                $('#lyrics_play').html(data.lyrics_html);
 
-                var lyrics_entries = data.guessed_lyrics;
-                var lineIdx = 0;
-                var div = $('<div>').attr('id', 'line_'+lineIdx).addClass('line').appendTo('#lyrics_play');
-
-                lyrics_entries.forEach(function(entry, idx){
-
-                    var span = $('<span>').html(entry).attr('id', 'word_'+idx).addClass('word');
-
-                    if (entry == '?') span.addClass('hidden');
-
-                    span.attr('lang', '{{ song.language }}');
-
-                    if (entry == '\n'){
-                        lineIdx++;
-                        div = $('<div>').attr('id', 'line_'+lineIdx).addClass('line').appendTo('#lyrics_play');
-                    }else{
-                        span.appendTo('#line_'+lineIdx);
-                    }
-                })
             }
 
             if(data.username != username && data.command == 'join'){
