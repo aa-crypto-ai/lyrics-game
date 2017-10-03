@@ -1,5 +1,6 @@
 from django.utils import timezone
 from django.db import models
+from django.db.models import Max
 from player.models import Player
 from lyrics.models import Song
 
@@ -26,6 +27,9 @@ class Game(models.Model):
     room = models.ForeignKey(Room, related_name='games')
     song = models.ForeignKey(Song, on_delete=models.CASCADE, related_name='games')
     status = models.CharField(max_length=10, default='active')
+
+    def get_last_played(self):
+        return self.entries.all().aggregate(Max('timestamp'))['timestamp__max']
 
     def __unicode__(self):
         return u'%s in Room %s' % (self.song, self.room)

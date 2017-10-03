@@ -43,6 +43,6 @@ tr a{
     width: 100px;
 }
 
-.start_timestamp {
+.start_timestamp, .last_played {
     width: 260px;
 }

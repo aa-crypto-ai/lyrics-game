@@ -22,9 +22,10 @@ class GameTable(tables.Table):
 
     start_timestamp = tables.Column(verbose_name='Time Created')
     id = tables.LinkColumn('game_play', text=lambda record: str(record.id), args=[A('room.id'), A('id')])
+    last_played = tables.Column(accessor='get_last_played', verbose_name='Last Played')
 
     class Meta:
         model = Game
-        sequence = ('id', 'status', 'start_timestamp')
+        sequence = ('id', 'status', 'start_timestamp', 'last_played')
         exclude = ('end_timestamp', 'room', 'song')
         orderable = False
