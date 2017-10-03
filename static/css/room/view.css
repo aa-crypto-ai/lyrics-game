@@ -36,13 +36,13 @@ tr a{
 
 /* cell styles */
 .id {
-    width: 30px;
+    width: 50px;
 }
 
 .status {
-    width: 60px;
+    width: 100px;
 }
 
 .start_timestamp {
-    width: 160px;
+    width: 260px;
 }
