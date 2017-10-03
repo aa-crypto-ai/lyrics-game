@@ -25,10 +25,14 @@ def separate_lyrics(lyrics, format='textarea'):
         for phrase in lyrics:
             if not phrase.strip():
                 continue
-            lyrics_group = re.split(ur'([\u00ff-\uffff]|\S+)', phrase);
-            # neglect lines with colon, these are listing names of backstage staff
-            if u'\uff1a' in lyrics_group or ':' in lyrics_group:
+            # asterisk (whole space)
+            if u'\uFF0A' in phrase:
                 continue
+            # neglect lines with colon, these are listing names of backstage staff
+            if u'\uff1a' in phrase or ':' in phrase:
+                continue
+            lyrics_group = re.split(ur'([\u00ff-\uffff]|\S+)', phrase);
+
             for char in lyrics_group:
                 if char.strip():
                     chars.append(char.strip())
@@ -37,12 +41,12 @@ def separate_lyrics(lyrics, format='textarea'):
         return chars
 
 def import_lyrics_to_db(lyrics_data, singers_data, year_data, name_data, player):
-    if ',' in singers_data and '&' in singers_data:
-        raise Exception('singers field has both , and &')
     if ',' in singers_data:
         singers = [singer.strip() for singer in singers_data.split(',') if singer.strip()]
     elif '&' in singers_data:
         singers = [singer.strip() for singer in singers_data.split('&') if singer.strip()]
+    elif '/' in singers_data:
+        singers = [singer.strip() for singer in singers_data.split('/') if singer.strip()]
     else:
         singers = [singers_data.strip()]
 

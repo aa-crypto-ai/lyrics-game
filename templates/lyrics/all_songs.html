@@ -19,7 +19,7 @@
         {% for song in songs %}
             <div class='trows'>
                 <div class='tcell'><a href="../song/{{ song.id }}">{{ song.name }}</a></div>
-                <div class='tcell'>{{ song.singers.all | join:'//' }}</div>
+                <div class='tcell'>{{ song.singers.all | join:' + ' }}</div>
                 <div class='tcell'>{{ song.lyrics }}</div>
             </div>
         {% endfor %}
