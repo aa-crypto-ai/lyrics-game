@@ -45,3 +45,13 @@ class Entry(models.Model):
 
     def __unicode__(self):
         return u'%s: %s (%s)' % (self.game, self.entry, self.player)
+
+class Activity(models.Model):
+    name = models.SlugField(max_length=100)
+    player = models.ForeignKey(Player, on_delete=models.CASCADE, related_name="activities")
+    game = models.ForeignKey(Game, on_delete=models.CASCADE, related_name="activities")
+
+    timestamp = models.DateTimeField(default=timezone.now)
+
+    def __unicode__(self):
+        return '%s - Player %s - Game %d - %s' % (self.timestamp.strftime('%Y-%m-%d %H:%M:%S'), self.player, self.game.id, self.name)

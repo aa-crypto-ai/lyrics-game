@@ -11,6 +11,7 @@ from channels import Channel
 
 from room.play import process_entry, get_guessed_lyrics, get_prev_entries, convert_guessed_lyrics_to_html, convert_prev_entries_to_html
 from player.models import Player
+from room.play import save_activity_log
 
 # Connected to chat-messages
 def msg_consumer(message):
@@ -72,6 +73,9 @@ def ws_message(message, game_id):
         send_info['prev_entries_html'] = prev_entries_html
         send_info['lyrics_html'] = lyrics_lines_html
 
+    if command != 'guess':
+        save_activity_log(name=command, username=username, game_id=game_id)
+
     Channel('chat-messages').send(send_info)
 
 # Connected to websocket.disconnect
@@ -80,5 +84,6 @@ def ws_disconnect(message, game_id):
     username = message.channel_session["username"]
     player = Player.objects.get(username=username)
 
+    save_activity_log(name='leave', username=username, game_id=game_id)
     Channel('chat-messages').send({'command': 'leave', 'username': username, 'nickname': player.nickname, 'game_id': game_id})
     Group("chat-%s" % game_id).discard(message.reply_channel)

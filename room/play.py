@@ -1,6 +1,6 @@
 from django.shortcuts import render
 
-from room.models import Entry, Room, Game
+from room.models import Entry, Room, Game, Activity
 from player.models import Player
 
 from yattag import Doc
@@ -96,3 +96,8 @@ def convert_prev_entries_to_html(prev_entries):
             text('%(nickname)s: %(text)s' % entry)
 
     return doc.getvalue()
+
+def save_activity_log(name, username, game_id):
+    player = Player.objects.get(username=username)
+    game = Game.objects.get(id=game_id)
+    activity = Activity.objects.create(name=name, player=player, game=game)
