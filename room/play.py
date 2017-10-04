@@ -7,12 +7,12 @@ from yattag import Doc
 from itertools import groupby
 
 
-def process_entry(word, game_id, username):
+def process_entry(word, game_id, user_id):
 
     if not word.strip():
         return None
 
-    player = Player.objects.get(username=username)
+    player = Player.objects.get(id=user_id)
     game = Game.objects.get(id=game_id)
 
     exist = (Entry.objects.filter(game=game, entry__iexact=word).count() > 0)
@@ -97,7 +97,7 @@ def convert_prev_entries_to_html(prev_entries):
 
     return doc.getvalue()
 
-def save_activity_log(name, username, game_id):
-    player = Player.objects.get(username=username)
+def save_activity_log(name, user_id, game_id):
+    player = Player.objects.get(id=user_id)
     game = Game.objects.get(id=game_id)
     activity = Activity.objects.create(name=name, player=player, game=game)

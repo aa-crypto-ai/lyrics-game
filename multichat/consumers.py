@@ -26,9 +26,9 @@ def ws_connect(message, game_id):
     message.reply_channel.send({"accept": True})
     # Parse the query string
     params = parse_qs(message.content["query_string"])
-    if b"username" in params:
+    if b"user_id" in params:
         # Set the username in the session
-        message.channel_session["username"] = params[b"username"][0].decode("utf8")
+        message.channel_session["user_id"] = params[b"user_id"][0]
         # Add the user to the room_name group
         Group("chat-%s" % game_id).add(message.reply_channel)
     else:
@@ -41,11 +41,11 @@ def ws_message(message, game_id):
 
     data = json.loads(message['text'])
     command = data['command']
-    username = message.channel_session["username"]
-    player = Player.objects.get(username=username)
+    user_id = message.channel_session["user_id"]
+    player = Player.objects.get(id=user_id)
 
     send_info = {
-        "username": username,
+        "user_id": user_id,
         "nickname": player.nickname,
         "game_id": game_id,
         "command": command,
@@ -53,7 +53,7 @@ def ws_message(message, game_id):
 
     if command == 'guess':
         word = data['text']
-        entry_result = process_entry(word, game_id, username)
+        entry_result = process_entry(word, game_id, user_id)
 
         if entry_result is None:
             return
@@ -74,16 +74,16 @@ def ws_message(message, game_id):
         send_info['lyrics_html'] = lyrics_lines_html
 
     if command != 'guess':
-        save_activity_log(name=command, username=username, game_id=game_id)
+        save_activity_log(name=command, user_id=user_id, game_id=game_id)
 
     Channel('chat-messages').send(send_info)
 
 # Connected to websocket.disconnect
 @channel_session_user
 def ws_disconnect(message, game_id):
-    username = message.channel_session["username"]
-    player = Player.objects.get(username=username)
+    user_id = message.channel_session["user_id"]
+    player = Player.objects.get(id=user_id)
 
-    save_activity_log(name='leave', username=username, game_id=game_id)
-    Channel('chat-messages').send({'command': 'leave', 'username': username, 'nickname': player.nickname, 'game_id': game_id})
+    save_activity_log(name='leave', user_id=user_id, game_id=game_id)
+    Channel('chat-messages').send({'command': 'leave', 'user_id': user_id, 'nickname': player.nickname, 'game_id': game_id})
     Group("chat-%s" % game_id).discard(message.reply_channel)
