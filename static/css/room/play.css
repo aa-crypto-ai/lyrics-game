@@ -62,9 +62,9 @@
 .correct_guess {
     background-color: white;
     -webkit-animation-name: guess; /* Safari 4.0 - 8.0 */
-    -webkit-animation-duration: 4s; /* Safari 4.0 - 8.0 */
+    -webkit-animation-duration: 8s; /* Safari 4.0 - 8.0 */
     animation-name: guess;
-    animation-duration: 4s;
+    animation-duration: 8s;
 }
 
 /* Safari 4.0 - 8.0 */
