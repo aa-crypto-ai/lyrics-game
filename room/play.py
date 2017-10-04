@@ -16,14 +16,18 @@ def process_entry(word, game_id, user_id):
     player = Player.objects.get(id=user_id)
     game = Game.objects.get(id=game_id)
 
-    exist = (Entry.objects.filter(game=game, entry__iexact=word).count() > 0)
-    entry = Entry.objects.create(game=game, player=player, entry=word)
+    guessed = (Entry.objects.filter(game=game, entry__iexact=word).count() > 0)
 
     lyrics = game.song.lyrics_words.filter(word__iexact=word)
+    positions = lyrics.values('position', 'word')
+    correct = True if positions else False
+
+    # create entry in DB
+    entry = Entry.objects.create(game=game, player=player, entry=word, guessed=guessed, correct=correct)
 
     return {
-        'positions_words': list(lyrics.values('position', 'word')),
-        'exist': exist,
+        'positions_words': list(lyrics.values('position', 'word')),  # this is equivalent to whether the guess is correct
+        'guessed': guessed,
     }
 
 def get_guessed_lyrics(game_id):
@@ -87,14 +91,22 @@ def get_prev_entries(game_id):
 
     entries = Entry.objects.filter(game=game).order_by('timestamp')
 
-    return [{'text': entry, 'nickname': nickname} for (entry, nickname) in entries.values_list('entry', 'player__nickname')]
+    return entries.values('entry', 'player__nickname', 'guessed', 'correct')
 
 def convert_prev_entries_to_html(prev_entries):
     doc, tag, text = Doc().tagtext()
 
     for entry in prev_entries:
-        with tag('div'):
-            text('%(nickname)s: %(text)s' % entry)
+        with tag('div', klass='entry'):
+            text('%(player__nickname)s: ' % entry)
+            with tag('span'):
+                text('%(entry)s' % entry)
+                if entry['guessed'] and entry['correct']:
+                    doc.attr(klass='guessed correct')
+                elif entry['guessed']:
+                    doc.attr(klass='guessed')
+                elif entry['correct']:
+                    doc.attr(klass='correct')
 
     return doc.getvalue()
 

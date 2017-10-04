@@ -77,7 +77,7 @@
                 var entryDiv = $('<div>').html(data.nickname + ': ').addClass('entry');
 
                 // add to list of guessed entries
-                if (data.exist){
+                if (data.guessed){
                     wordSpan.addClass('guessed');
                 }
                 if (data.positions_words.length > 0) {
@@ -86,8 +86,8 @@
                 wordSpan.appendTo(entryDiv);
                 entryDiv.appendTo($('#guess_entries'));
 
-                // add to lyrics window
-                if ( !data.exist ) {
+                // add to lyrics window if it's not guessed and it's correct
+                if ( !data.guessed ) {
                     data.positions_words.forEach(function(entry){
                         $('#word_' + entry.position).text(entry.word).removeClass('hidden').addClass('correct_guess');
                     })

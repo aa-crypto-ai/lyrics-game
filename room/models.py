@@ -39,6 +39,9 @@ class Entry(models.Model):
     entry = models.CharField(max_length=70)
     timestamp = models.DateTimeField(default=timezone.now)
     player = models.ForeignKey(Player, null=True, related_name='entries')
+    # specify if the entry is correct / guessed by other players
+    guessed = models.BooleanField(default=False)
+    correct = models.BooleanField(default=False)
 
     @property
     def formatted_timestamp(self):

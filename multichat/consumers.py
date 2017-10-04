@@ -60,7 +60,7 @@ def ws_message(message, game_id):
             return
 
         send_info['positions_words'] = entry_result['positions_words']
-        send_info['exist'] = entry_result['exist']
+        send_info['guessed'] = entry_result['guessed']
         send_info['word'] = word
 
     if command == 'join':
