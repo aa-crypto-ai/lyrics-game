@@ -10,15 +10,16 @@ from itertools import groupby
 
 def process_entry(word, game_id, user_id):
 
-    if not word.strip():
+    word_cleaned = word.strip()
+    if not word_cleaned:
         return None
 
     player = Player.objects.get(id=user_id)
     game = Game.objects.get(id=game_id)
 
-    guessed = (Entry.objects.filter(game=game, entry__iexact=word).count() > 0)
+    guessed = (Entry.objects.filter(game=game, entry__iexact=word_cleaned).count() > 0)
 
-    lyrics = game.song.lyrics_words.filter(word__iexact=word)
+    lyrics = game.song.lyrics_words.filter(word__iexact=word_cleaned)
     positions = lyrics.values('position', 'word')
     correct = True if positions else False
 
