@@ -1,5 +1,6 @@
 {% extends 'templates/base.html' %}
 {% load static %}
+{% load tz %}
 
 {% block title %}
     Games List
@@ -16,6 +17,8 @@
 {% block content %}
 
     {% load django_tables2 %}
-    {% render_table table %}
+    {% localtime on %}
+        {% render_table table %}
+    {% endlocaltime %}
 
 {% endblock %}
