@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.db.models import Max, Q
 
 from room.models import Entry, Room, Game, Activity
 from player.models import Player
@@ -101,3 +102,15 @@ def save_activity_log(name, user_id, game_id):
     player = Player.objects.get(id=user_id)
     game = Game.objects.get(id=game_id)
     activity = Activity.objects.create(name=name, player=player, game=game)
+
+def get_connected_users(game_id):
+    last_activity = Activity.objects.filter(game_id=game_id).values('player_id').annotate(last_activity=Max('timestamp')).values_list('player_id', 'last_activity')
+    latest_actions = Activity.objects.filter(
+        reduce(
+            lambda x,y: x|y, [
+                Q(player_id=player_id, timestamp=last_ts) for player_id, last_ts in last_activity
+            ]
+        )
+    )
+    active_players = latest_actions.filter(name='join').values('player_id', 'player__nickname')
+    return list(active_players)

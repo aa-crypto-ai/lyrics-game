@@ -56,6 +56,13 @@
                 // show prev entries
                 $('#guess_entries').html(data.prev_entries_html);
 
+                // show active users
+                data.active_players.forEach(function(user){
+                    if (user.player__id != userId) {
+                        $('<div>').html('-- ' + user.player__nickname + ' joined --').addClass('event_join').appendTo($('#guess_entries'));
+                    }
+                })
+
                 // show the whole lyrics now
                 $('#lyrics_play').html(data.lyrics_html);
 

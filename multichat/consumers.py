@@ -11,7 +11,7 @@ from channels import Channel
 
 from room.play import process_entry, get_guessed_lyrics, get_prev_entries, convert_guessed_lyrics_to_html, convert_prev_entries_to_html
 from player.models import Player
-from room.play import save_activity_log
+from room.play import save_activity_log, get_connected_users
 
 # Connected to chat-messages
 def msg_consumer(message):
@@ -25,6 +25,7 @@ def ws_connect(message, game_id):
     # Accept connection
     message.reply_channel.send({"accept": True})
     # Parse the query string
+    get_connected_users(game_id)
     params = parse_qs(message.content["query_string"])
     if b"user_id" in params:
         # Set the username in the session
@@ -67,9 +68,12 @@ def ws_message(message, game_id):
         lyrics_lines = get_guessed_lyrics(game_id)
         lyrics_lines_html = convert_guessed_lyrics_to_html(lyrics_lines)
 
+        active_players = get_connected_users(game_id)
+
         prev_entries = get_prev_entries(game_id)
         prev_entries_html = convert_prev_entries_to_html(prev_entries)
 
+        send_info['active_players'] = active_players
         send_info['prev_entries_html'] = prev_entries_html
         send_info['lyrics_html'] = lyrics_lines_html
 
