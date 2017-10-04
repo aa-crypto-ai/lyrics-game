@@ -9,7 +9,7 @@ import re
 import pytz, datetime
 
 from lyrics.models import Song
-from lyrics.db_manage import import_lyrics_to_db
+from lyrics.db_manage import import_lyrics_to_db, separate_lyrics
 from player.models import Player
 
 @user_passes_test(lambda u: u.is_admin)
