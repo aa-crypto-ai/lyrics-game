@@ -1,24 +1,26 @@
-#guess_container {
-    position: relative;
-    float: left;
-    width: 200px;
-    max-height: calc(100vh - 200px);
-}
 #guess_entries {
-    position: relative;
-    overflow-y:auto;
-    height: calc(100vh - 300px);
-    margin-bottom: 50px;
+    position: fixed;
+    overflow-y:scroll;
+    left: 10px;
+    top: 200px;
+    bottom: 80px;
+    width: 200px;
 }
 #guess_box_container {
-    position: absolute;
+    position: fixed;
     bottom: 10px;
-    left: 0;
+    left: 0px;
+    margin: 10px;
+    width: 200px;
 }
 #lyrics_play {
+    left: 0px;
+    top: 0px;
+    right: 0px;
+    height: 100%;
+    margin: 200px 10px 10px 220px;
     min-width: 300px;
     max-width: 600px;
-    max-height: 90%;
     overflow-y: auto;
 }
 .word {
