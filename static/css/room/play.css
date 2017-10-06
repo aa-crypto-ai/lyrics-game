@@ -35,6 +35,19 @@
     min-width: 300px;
     max-width: 600px;
     overflow-y: auto;
+    counter-reset: line;
+}
+.line {
+    counter-increment: line;
+}
+.line:before {
+    content: counter(line);
+    color: #888888;
+    width: 20px;
+    text-align: right;
+    display: inline-block;
+    margin: 0px 6px 0px 0px;
+    -webkit-user-select: none;
 }
 .word {
     display: inline-block;
