@@ -16,6 +16,7 @@
 {% block content %}
 
     <div id="guess_entries"></div>
+    <div id="more_guesses">More Messages Below</div>
     <div id="guess_box_container">
         <input id="input" type="text"></input>
         <button onclick="sendText()">Send</button>
@@ -47,7 +48,14 @@
             socket.send(JSON.stringify({"command": "guess", "text": message}));
         }
         socket.onmessage = function(e) {
-            var data = JSON.parse(e.data)
+            var data = JSON.parse(e.data);
+
+            var scrollBarPosition = {
+                'offset': $('#guess_entries').scrollTop(),
+                'height': $('#guess_entries').height(),
+                'bottomPosition': $('#guess_entries').prop('scrollHeight'),
+            };
+            var scrollBarAtBottom = (scrollBarPosition['offset'] + scrollBarPosition['height'] >= scrollBarPosition['bottomPosition']);
 
             if(data.user_id == userId && data.command == 'join'){
 
@@ -96,8 +104,12 @@
             if ( data.command == 'leave' ){
                 $('<div>').html('-- ' + data.nickname + ' left --').addClass('event_left').appendTo($('#guess_entries'));
             }
-            $('#guess_entries').animate({scrollTop: $('#guess_entries').prop('scrollHeight')});
 
+            if ( data.user_id == userId || scrollBarAtBottom ) {
+                $('#guess_entries').animate({scrollTop: $('#guess_entries').prop('scrollHeight')});
+            } else {
+                $('#more_guesses').css('display', 'block');
+            }
 
         }
         socket.onopen = function() {
@@ -107,5 +119,17 @@
         }
         // Call onopen directly if socket is already open
         if (socket.readyState == WebSocket.OPEN) socket.onopen();
+
+        $('#guess_entries').scroll(function(){
+            var scrollBarPosition = {
+                'offset': $('#guess_entries').scrollTop(),
+                'height': $('#guess_entries').height(),
+                'bottomPosition': $('#guess_entries').prop('scrollHeight'),
+            };
+            var scrollBarAtBottom = (scrollBarPosition['offset'] + scrollBarPosition['height'] >= scrollBarPosition['bottomPosition']);
+            if ( scrollBarAtBottom ) {
+                $('#more_guesses').css('display', 'none');
+            }
+        })
     </script>
 {% endblock %}

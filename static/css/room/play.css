@@ -13,6 +13,19 @@
     margin: 10px;
     width: 200px;
 }
+#more_guesses {
+    position: fixed;
+    left: 10px;
+    bottom: 80px;
+    width: 200px;
+    font-size: 16px;
+    color: white;
+    text-align: center;
+    vertical-align: middle;
+    padding: 10px 0px;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: none;
+}
 #lyrics_play {
     left: 0px;
     top: 0px;
