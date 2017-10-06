@@ -46,6 +46,16 @@
 
 .table-container table{
     display: table;
-    position: fixed;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
     margin: 200px 10px 10px 10px;
+    z-index: -1;
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+}
+
+.table-container {
 }

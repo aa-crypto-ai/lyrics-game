@@ -2,7 +2,7 @@
     position: fixed;
     overflow-y:scroll;
     left: 10px;
-    top: 200px;
+    top: 182px;
     bottom: 80px;
     width: 200px;
 }
@@ -31,7 +31,7 @@
     top: 0px;
     right: 0px;
     height: 100%;
-    margin: 200px 10px 10px 220px;
+    margin: 182px 10px 10px 220px;
     min-width: 300px;
     max-width: 600px;
     overflow-y: auto;

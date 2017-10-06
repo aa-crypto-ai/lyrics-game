@@ -1,7 +1,4 @@
 /* table styles */
-table {
-    display: table;
-}
 thead {
     display: table-header-group;
     font-weight: bold;
