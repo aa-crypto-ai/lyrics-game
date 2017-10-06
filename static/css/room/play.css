@@ -2,16 +2,19 @@
     position: fixed;
     overflow-y:scroll;
     left: 10px;
-    top: 182px;
-    bottom: 80px;
+    top: 152px;
+    bottom: 40px;
     width: 200px;
+    background-color: white;
 }
 #guess_box_container {
     position: fixed;
-    bottom: 10px;
+    bottom: 0px;
     left: 0px;
-    margin: 10px;
+    padding: 10px;
+    height: 20px;
     width: 200px;
+    background-color: white;
 }
 #more_guesses {
     position: fixed;
@@ -30,10 +33,10 @@
     left: 0px;
     top: 0px;
     right: 0px;
+    bottom: 0px;
     height: 100%;
-    margin: 182px 10px 10px 220px;
-    min-width: 300px;
-    max-width: 600px;
+    width: 100%;
+    margin: 152px 10px 10px 220px;
     overflow-y: auto;
     counter-reset: line;
 }
