@@ -1,3 +1,5 @@
+import argparse
+
 import django
 django.setup()
 
@@ -25,7 +27,15 @@ def update_entries(game_id):
 
 if __name__ == '__main__':
 
-    games = Game.objects.all()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-g", "--game_id", type=int)
+    args = parser.parse_args()
+
+    if args.game_id:
+        games = Game.objects.filter(id=args.game_id)
+    else:
+        games = Game.objects.all()
+
     for game in games:
         print 'processing game %d' % game.id
         update_entries(game.id)
