@@ -23,4 +23,5 @@ urlpatterns = [
     url(r'^edit/$', login_required(player_view.update_profile), name='edit_profile'),
     url(r'^password/change/$', password_change, {'template_name': 'registration/password_change_form.html'}, name='password_change_form'),
     url(r'^password/change/done/$', password_change_done, {'template_name': 'registration/password_change_done.html'}, name='password_change_done'),
+    url(r'^registration/$', player_view.registration, name='registration_register'),
 ]

@@ -1,5 +1,6 @@
 from player.models import Player
 from django import forms
+from django.contrib.auth.forms import UserCreationForm
 
 class UpdateProfileForm(forms.ModelForm):
     username = forms.SlugField(required=True, max_length=50)
@@ -26,3 +27,12 @@ class UpdateProfileForm(forms.ModelForm):
             player.save()
 
         return player
+
+class RegistrationForm(UserCreationForm):
+    username = forms.SlugField(required=True, max_length=50)
+    email = forms.EmailField(required=True)
+    nickname = forms.CharField(required=True, max_length=20)
+
+    class Meta:
+        model = Player
+        fields = ('email', 'username', 'nickname', 'password1', 'password2')

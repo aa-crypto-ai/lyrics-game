@@ -19,6 +19,7 @@ from django.contrib import admin
 from django.conf.urls import include
 from django.contrib.auth import views as auth_views
 from django.views.generic import RedirectView
+from django.shortcuts import redirect
 
 urlpatterns = [
     url(r'^login/$', auth_views.login, name='login'),
@@ -27,4 +28,5 @@ urlpatterns = [
     url(r'^room/', include('room.urls')),
     url(r'^lyrics/', include('lyrics.urls')),
     url(r'^player/', include('player.urls')),
+    url(r'^$', include('room.urls')),
 ]

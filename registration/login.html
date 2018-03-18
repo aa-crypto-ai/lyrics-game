@@ -1,4 +1,4 @@
-
+{% load i18n %}
 
 {% block title %}Login{% endblock %}
 
@@ -9,4 +9,5 @@
     {{ form.as_p }}
     <button type="submit">Login</button>
   </form>
+  <p>{% trans "Not member" %}? <a href="{% url 'registration_register' %}">{% trans "Register" %}</a>!</p>
 {% endblock %}
